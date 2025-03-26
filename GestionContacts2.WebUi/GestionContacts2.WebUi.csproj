@@ -181,6 +181,10 @@
     <Compile Include="Migrations\202503220705523_AddForeignKeyToContacts.Designer.cs">
       <DependentUpon>202503220705523_AddForeignKeyToContacts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202503260545232_AddCustomFieldsToAspNetUsers.cs" />
+    <Compile Include="Migrations\202503260545232_AddCustomFieldsToAspNetUsers.Designer.cs">
+      <DependentUpon>202503260545232_AddCustomFieldsToAspNetUsers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -309,6 +313,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202503220705523_AddForeignKeyToContacts.resx">
       <DependentUpon>202503220705523_AddForeignKeyToContacts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202503260545232_AddCustomFieldsToAspNetUsers.resx">
+      <DependentUpon>202503260545232_AddCustomFieldsToAspNetUsers.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
