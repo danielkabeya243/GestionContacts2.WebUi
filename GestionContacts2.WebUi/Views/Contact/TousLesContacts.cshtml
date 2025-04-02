@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "TousLesContacts";
+}
+
+<h2>Liste des Contacts</h2>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Numéro de Téléphone</th>
+            <th>Adresse</th>
+            <th>Entreprise</th>
+            <th>Notes</th>
+            <th>Date de Création</th>
+
+
+        </tr>
+
+    </thead>
+    <tbody>
+        @foreach (var contact in Model)
+        {
+            <tr>
+                <td>@contact.Nom</td>
+                <td>@contact.Prenom</td>
+                <td>@contact.Email</td>
+                <td>@contact.NumeroTel</td>
+                <td>@contact.Adresse</td>
+                <td>@contact.Entreprise</td>
+                <td>@contact.NotesPersonnelles</td>
+                <td>@contact.DateCreation.ToString("yyyy-MM-dd")</td>
+            </tr>
+        }
+
+
+
+    </tbody>
+
+
+</table>
+

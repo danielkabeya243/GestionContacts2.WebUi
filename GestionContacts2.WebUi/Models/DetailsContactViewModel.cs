@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace GestionContacts2.Data
+namespace GestionContacts2.WebUi.Models
 {
-    public class Contact
+    public class DetailsContactViewModel
     {
-        public int ContactId { get; set; }
         public string Nom { get; set; }
         public string Prenom { get; set; }
         public string Email { get; set; }
@@ -18,7 +16,6 @@ namespace GestionContacts2.Data
         public string NotesPersonnelles { get; set; }
         public DateTime DateCreation { get; set; }
         public DateTime? DateModification { get; set; }
-        public string UserId { get; set; } // Clé étrangère vers ApplicationUser
-        public ApplicationUser User { get; set; } // Relation avec ApplicationUser
+
     }
 }

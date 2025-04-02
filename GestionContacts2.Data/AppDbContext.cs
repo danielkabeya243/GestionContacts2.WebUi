@@ -9,19 +9,20 @@ using System.Threading.Tasks;
 namespace GestionContacts2.Data
 {
     // heritage qui permet d’utiliser les tables d’ASP.NET Identity(AspNetUsers, AspNetRoles, etc.).
-    internal class ApplicationDbContext: IdentityDbContext<ApplicationUser>
+    public class AppDbContext: IdentityDbContext<ApplicationUser>
     {
         // Constructeur pour appeler la connexion
-        public ApplicationDbContext()
+        public AppDbContext()
         : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
 
         // Méthode pour créer une instance de DbContext
         public DbSet<Contact> Contacts { get; set; }
-        public static ApplicationDbContext Create()
+        //Ici on cree la table asp net users
+        public static AppDbContext Create()
         {
-            return new ApplicationDbContext();
+            return new AppDbContext();
         }
     }
 }

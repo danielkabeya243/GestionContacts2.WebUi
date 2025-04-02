@@ -8,7 +8,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace GestionContacts2.Data
 {
-    internal class ApplicationUser:IdentityUser
+    public class ApplicationUser:IdentityUser
     {
         public string Nom { get; set; }
         public string Prenom { get; set; }
