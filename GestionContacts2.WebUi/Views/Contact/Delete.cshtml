@@ -1,0 +1,15 @@
+﻿@model GestionContacts2.Data.Contact
+@{
+    ViewBag.Title = "SupprimerContact";
+}
+
+<h2>SupprimerContact</h2>
+<p>Es-tu sûr de vouloir supprimer le contact : <strong>@Model.Nom @Model.Prenom</strong> ?</p>
+
+@using (Html.BeginForm("DeleteContactConfirmed", "Contact", FormMethod.Post))
+{
+    @Html.Hidden("ContactId", Model.ContactId)
+    <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
+    <a href="@Url.Action("TousLesContacts", "Contact")" class="btn btn-secondary">Annuler</a>
+
+}

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using GestionContacts2.Data;
 using GestionContacts2.WebUi.Models;
+using Microsoft.AspNet.Identity;
 
 namespace GestionContacts2.WebUi.Controllers
 {
@@ -159,6 +160,68 @@ namespace GestionContacts2.WebUi.Controllers
                 return RedirectToAction("TousLesContacts");
 
             }
+
+
+
+        }
+
+        //La methode AjouterContact() sans parametre est appelee lorsque l'utilisateur accède pour la premiere fois à la page de formulaire pour ajouter un contact elle affiche un formulaire vide
+        public ActionResult AjouterContact()
+        {
+            return View();
+        }
+
+
+        //Par contre cette methode est appelée lorsque l'utilisateur soumet le formulaire. Elle utilise l'objet Contact que l’utilisateur a rempli, et cette version de AjouterContact
+        //reçoit les données du formulaire pour effectuer les validations et enregistrer les données en base si elles sont valides.
+
+        [HttpPost]
+        public ActionResult AjouterContact(Contact nouveauContact)
+        {
+
+            string userID = User.Identity.GetUserId();
+            nouveauContact.UserId = userID;
+
+            //ici on verifie que toutes les règles de validation ont été respectées
+            //si une règle est violée modelstate.isvalid renverra false
+            if (!ModelState.IsValid)
+            {
+                return View(nouveauContact);
+            }
+
+            using (var context = new AppDbContext())
+            {
+                // Vérifie si un contact avec le même email existe déjà
+                bool contactExists = context.Contacts.Any(c => c.Email == nouveauContact.Email);
+
+                if (contactExists)
+                {
+                    ModelState.AddModelError("Email", "Un contact avec cet email existe déjà.");
+                    return View(nouveauContact);
+                }
+
+                // Vérifie que l'utilisateur associé existe
+                bool userExists = context.Users.Any(u => u.Id == userID);
+                if (!userExists)
+                {
+                    ModelState.AddModelError("UserId", "L'utilisateur associé est introuvable.");
+                    return View(nouveauContact);
+                }
+                // Ajoute la date de création
+                nouveauContact.DateCreation = DateTime.Now;
+
+                // Ajoute le contact à la base de données
+                context.Contacts.Add(nouveauContact);
+                context.SaveChanges();
+
+
+                TempData["SuccessMessage"] = "Le contact a été ajouté avec succès !";
+                // Redirige vers la liste des contacts ou une page de confirmation
+                return RedirectToAction("TousLesContacts");
+
+            }
+
+
 
 
 

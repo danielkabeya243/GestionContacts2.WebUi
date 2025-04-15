@@ -1,0 +1,43 @@
+﻿@model GestionContacts2.Data.Contact
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Edit", "Contact", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.ContactId)
+
+    <div>
+        <label>Nom :</label>
+        @Html.TextBoxFor(model => model.Nom)
+    </div>
+    <div>
+        <label>Prénom :</label>
+        @Html.TextBoxFor(model => model.Prenom)
+    </div>
+    <div>
+        <label>Email :</label>
+        @Html.TextBoxFor(model => model.Email)
+    </div>
+    <div>
+        <label>Numéro de téléphone :</label>
+        @Html.TextBoxFor(model => model.NumeroTel)
+    </div>
+    <div>
+        <label>Adresse :</label>
+        @Html.TextBoxFor(model => model.Adresse)
+    </div>
+    <div>
+        <label>Entreprise :</label>
+        @Html.TextBoxFor(model => model.Entreprise)
+    </div>
+    <div>
+        <label>Notes Personnelles :</label>
+        @Html.TextBoxFor(model => model.NotesPersonnelles)
+    </div>
+
+    <button type="submit">Enregistrer les modifications</button>
+}
+

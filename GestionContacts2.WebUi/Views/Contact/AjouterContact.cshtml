@@ -1,0 +1,63 @@
+﻿@model GestionContacts2.Data.Contact
+@{
+    ViewBag.Title = "AjouterContact";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div style="padding:10px; background-color:#d4edda; color:#155724; border:1px solid #c3e6cb; border-radius:4px; margin-bottom:10px;">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<h2>Ajouter un Contact</h2>
+
+@using (Html.BeginForm("AjouterContact", "Contact", FormMethod.Post))
+{
+    @Html.ValidationSummary(true)
+
+    <div>
+        <label>Nom :</label>
+        @Html.TextBoxFor(model => model.Nom)
+        @Html.ValidationMessageFor(model => model.Nom)
+    </div>
+
+    <div>
+        <label>Prénom :</label>
+        @Html.TextBoxFor(model => model.Prenom)
+        @Html.ValidationMessageFor(model => model.Prenom)
+    </div>
+
+    <div>
+        <label>Email :</label>
+        @Html.TextBoxFor(model => model.Email)
+        @Html.ValidationMessageFor(model => model.Email)
+    </div>
+
+    <div>
+        <label>Numéro de téléphone :</label>
+        @Html.TextBoxFor(model => model.NumeroTel)
+        @Html.ValidationMessageFor(model => model.NumeroTel)
+    </div>
+
+    <div>
+        <label>Adresse :</label>
+        @Html.TextBoxFor(model => model.Adresse)
+        @Html.ValidationMessageFor(model => model.Adresse)
+    </div>
+
+    <div>
+        <label>Entreprise :</label>
+        @Html.TextBoxFor(model => model.Entreprise)
+        @Html.ValidationMessageFor(model => model.Entreprise)
+    </div>
+
+    <div>
+        <label>Notes personnelles :</label>
+        @Html.TextBoxFor(model => model.NotesPersonnelles)
+        @Html.ValidationMessageFor(model => model.NotesPersonnelles)
+    </div>
+
+    <button type="submit">Ajouter</button>
+
+}
+
