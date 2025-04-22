@@ -8,7 +8,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace GestionContacts2.Data
 {
-    public class ApplicationUser:IdentityUser
+    public class DataApplicationUser:IdentityUser
     {
         public string Nom { get; set; }
         public string Prenom { get; set; }
@@ -16,6 +16,6 @@ namespace GestionContacts2.Data
         public DateTime DateNaissance { get; set; }
         public string RoleU { get; set; }
 
-        public virtual ICollection<Contact> Contacts { get; set; }
+        
     }
 }

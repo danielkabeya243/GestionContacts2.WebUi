@@ -13,7 +13,7 @@ namespace GestionContacts2.WebUi.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202503200505188_InitialCreate"; }
+            get { return "202504190157528_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

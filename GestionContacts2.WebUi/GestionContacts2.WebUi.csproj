@@ -172,21 +172,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202503200505188_InitialCreate.cs" />
-    <Compile Include="Migrations\202503200505188_InitialCreate.Designer.cs">
-      <DependentUpon>202503200505188_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202503200514020_AddContactsTable.cs" />
-    <Compile Include="Migrations\202503200514020_AddContactsTable.Designer.cs">
-      <DependentUpon>202503200514020_AddContactsTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202503220705523_AddForeignKeyToContacts.cs" />
-    <Compile Include="Migrations\202503220705523_AddForeignKeyToContacts.Designer.cs">
-      <DependentUpon>202503220705523_AddForeignKeyToContacts.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202503260545232_AddCustomFieldsToAspNetUsers.cs" />
-    <Compile Include="Migrations\202503260545232_AddCustomFieldsToAspNetUsers.Designer.cs">
-      <DependentUpon>202503260545232_AddCustomFieldsToAspNetUsers.cs</DependentUpon>
+    <Compile Include="Migrations\202504190157528_InitialCreate.cs" />
+    <Compile Include="Migrations\202504190157528_InitialCreate.Designer.cs">
+      <DependentUpon>202504190157528_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -272,11 +260,11 @@
     <Content Include="Views\Contact\Edit.cshtml" />
     <Content Include="Views\Contact\Delete.cshtml" />
     <Content Include="Views\Contact\AjouterContact.cshtml" />
-    <Content Include="Views\Users\Login.cshtml" />
+    <Content Include="Views\Auth\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Auth\" />
+    <Folder Include="Views\Users\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GestionContacts2.Data\GestionContacts2.Data.csproj">
@@ -316,17 +304,8 @@
     <Content Include="Scripts\jquery-3.7.0.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202503200505188_InitialCreate.resx">
-      <DependentUpon>202503200505188_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202503200514020_AddContactsTable.resx">
-      <DependentUpon>202503200514020_AddContactsTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202503220705523_AddForeignKeyToContacts.resx">
-      <DependentUpon>202503220705523_AddForeignKeyToContacts.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202503260545232_AddCustomFieldsToAspNetUsers.resx">
-      <DependentUpon>202503260545232_AddCustomFieldsToAspNetUsers.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202504190157528_InitialCreate.resx">
+      <DependentUpon>202504190157528_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

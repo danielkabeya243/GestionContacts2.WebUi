@@ -19,6 +19,6 @@ namespace GestionContacts2.Data
         public DateTime DateCreation { get; set; }
         public DateTime? DateModification { get; set; }
         public string UserId { get; set; } // Clé étrangère vers ApplicationUser
-        public ApplicationUser User { get; set; } // Relation avec ApplicationUser
+        public DataApplicationUser User { get; set; } // Relation avec ApplicationUser
     }
 }

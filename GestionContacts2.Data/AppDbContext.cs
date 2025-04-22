@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GestionContacts2.Data
 {
     // heritage qui permet d’utiliser les tables d’ASP.NET Identity(AspNetUsers, AspNetRoles, etc.).
-    public class AppDbContext: IdentityDbContext<ApplicationUser>
+    public class AppDbContext: IdentityDbContext<DataApplicationUser>
     {
         // Constructeur pour appeler la connexion
         public AppDbContext()

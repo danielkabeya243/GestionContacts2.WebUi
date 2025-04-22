@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using GestionContacts2.WebUi.Models;
 
+
 namespace GestionContacts2.WebUi.Controllers
 {
     [Authorize]
