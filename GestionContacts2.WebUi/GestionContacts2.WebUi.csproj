@@ -261,10 +261,11 @@
     <Content Include="Views\Contact\Delete.cshtml" />
     <Content Include="Views\Contact\AjouterContact.cshtml" />
     <Content Include="Views\Auth\Login.cshtml" />
+    <Content Include="Views\Users\Create.cshtml" />
+    <Content Include="Views\Contact\MesContacts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Users\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GestionContacts2.Data\GestionContacts2.Data.csproj">

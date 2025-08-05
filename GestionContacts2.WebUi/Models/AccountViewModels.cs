@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GestionContacts2.WebUi.Models
@@ -79,6 +80,25 @@ namespace GestionContacts2.WebUi.Models
         [Display(Name = "Confirmer le mot de passe")]
         [Compare("Password", ErrorMessage = "Le nouveau mot de passe et le mot de passe de confirmation ne correspondent pas.")]
         public string ConfirmPassword { get; set; }
+
+        // On étend la classe RegisterViewModel en ajoutant des Nouvelles propriétés personnalisées 
+        [Required]
+        [Display(Name = "Nom")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Prénom")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Phone]
+        [Display(Name = "Téléphone")]
+        public string PhoneNumber { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        [Display(Name = "Date de naissance")]
+        public DateTime BirthDate { get; set; }
     }
 
     public class ResetPasswordViewModel

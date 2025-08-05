@@ -46,6 +46,8 @@ namespace GestionContacts2.WebUi.Models
     // =======================================
 
     // Vous pouvez ajouter des données de profil pour l'utilisateur en ajoutant d'autres propriétés à votre classe ApplicationUser. Pour en savoir plus, consultez https://go.microsoft.com/fwlink/?LinkID=317594.
+
+    //Les champs name,firstname ne sont pas des attributs par defaut à identity car microsoft nous laisse la liberté de structurer notre application comme on le souhaite.
     public class ApplicationUser : IdentityUser
     {
         public string Name { get; set; }       // 👈 pour Name

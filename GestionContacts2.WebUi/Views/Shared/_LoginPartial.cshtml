@@ -1,22 +1,29 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@* Import nécessaire pour utiliser User.Identity.GetUserName() *@
+
+@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    @* Formulaire de déconnexion sécurisé avec token anti-CSRF *@
+    using (Html.BeginForm("Logout", "Auth", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
 
-    <ul class="navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class="nav-link" })
-        </li>
-        <li><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Se déconnecter</a></li>
-    </ul>
+<ul class="navbar-nav navbar-right">
+    <li>
+        @* Lien vers la gestion du profil utilisateur *@
+        @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+    </li>
+    @* Lien qui soumet le formulaire pour déconnecter via JavaScript *@
+    <li><button type="submit" class="btn btn-link nav-link" style="padding:0;">Se déconnecter</button></li>
+</ul>
     }
 }
 else
 {
-    <ul class="navbar-nav navbar-right">
-        <li>@Html.ActionLink("S'inscrire", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class="nav-link" })</li>
-        <li>@Html.ActionLink("Se connecter", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class="nav-link" })</li>
-    </ul>
+<ul class="navbar-nav navbar-right">
+    @* Lien vers la page d'inscription (création utilisateur) *@
+    <li>@Html.ActionLink("S'inscrire", "Create", "Users", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
+    @* Lien vers la page de connexion *@
+    <li>@Html.ActionLink("Se connecter", "Login", "Auth", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-link" })</li>
+</ul>
 }

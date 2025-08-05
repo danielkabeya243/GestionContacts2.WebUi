@@ -8,6 +8,18 @@ namespace GestionContacts2.Data
 {
     public class Contact
     {
+
+
+
+        // Clé étrangère (Foreign Key) :
+        // Cette propriété contient l'identifiant unique de l'utilisateur auquel ce contact est lié.
+        // Le type correspond toujours au type de la clé primaire de la table référencée (ex. int, string).
+        // Cette valeur est stockée dans la base de données et sert à faire le lien entre les tables.
+
+        // Propriété de navigation :
+        // Cette propriété est un objet complet de type 'User' (ou autre classe liée).
+        // Elle permet d'accéder facilement aux données complètes de l'utilisateur lié dans le code C#.
+        // Cette propriété n'est pas directement stockée en base, mais utilisée par Entity Framework pour gérer les relations.
         public int ContactId { get; set; }
         public string Nom { get; set; }
         public string Prenom { get; set; }

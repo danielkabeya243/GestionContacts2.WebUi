@@ -12,6 +12,8 @@ namespace GestionContacts2.WebUi.Controllers
     public class ContactController : Controller
     {
 
+
+
         private readonly AppDbContext _context;
 
         // Initialisation du contexte dans le constructeur
@@ -26,6 +28,15 @@ namespace GestionContacts2.WebUi.Controllers
 
             //On retourne la vue pour la liste des contacts
             return View(listContacts);
+        }
+
+        [Authorize]
+        public ActionResult MesContacts()
+        {
+            var userId = User.Identity.GetUserId(); // Nécessite using Microsoft.AspNet.Identity;
+            var contacts = _context.Contacts.Where(c => c.UserId == userId).ToList(); // ou UserId selon ta colonne
+
+            return View("MesContacts", contacts); // vue personnalisée
         }
 
         //Methode pour recuperer les informations d'un contact alors on utilise le nom du contact pour afficher les informations relatives à un contact
