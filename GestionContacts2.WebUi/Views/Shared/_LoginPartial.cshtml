@@ -11,7 +11,7 @@
 <ul class="navbar-nav navbar-right">
     <li>
         @* Lien vers la gestion du profil utilisateur *@
-        @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+        @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "MesContacts", "Contact", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
     </li>
     @* Lien qui soumet le formulaire pour déconnecter via JavaScript *@
     <li><button type="submit" class="btn btn-link nav-link" style="padding:0;">Se déconnecter</button></li>

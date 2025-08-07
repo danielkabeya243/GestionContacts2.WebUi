@@ -1,7 +1,46 @@
-﻿
+﻿@model IEnumerable<GestionContacts2.WebUi.Models.ContactViewModel>
+
 @{
-    ViewBag.Title = "MesContacts";
+    ViewBag.Title = "Mes Contacts";
 }
 
-<h2>MesContacts</h2>
+<h2>Mes Contacts</h2>
 
+@if (!Model.Any())
+{
+    <p>Vous n'avez aucun contact pour le moment.</p>
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Téléphone</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contact in Model)
+            {
+                <tr>
+                    <td>@contact.Nom</td>
+                    <td>@contact.Prenom</td>
+                    <td>@contact.Telephone</td>
+                    <td>@contact.Email</td>
+                    <td>
+                        @Html.ActionLink("Voir", "Details", "Contacts", new { id = contact.Id }, new { @class = "btn btn-info btn-sm" }) |
+                        @Html.ActionLink("Modifier", "Edit", "Contacts", new { id = contact.Id }, new { @class = "btn btn-warning btn-sm" }) |
+                        @Html.ActionLink("Supprimer", "Delete", "Contacts", new { id = contact.Id }, new { @class = "btn btn-danger btn-sm" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<p>
+    @Html.ActionLink("Ajouter un nouveau contact", "Create", "Contacts", null, new { @class = "btn btn-primary" })
+</p>

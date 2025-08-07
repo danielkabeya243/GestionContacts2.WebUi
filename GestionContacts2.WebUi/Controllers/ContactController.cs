@@ -31,12 +31,25 @@ namespace GestionContacts2.WebUi.Controllers
         }
 
         [Authorize]
+        //Cette methode retourne la liste des contacts de l'utilisateur connecté elle retourne dans un view model 
+        //contactsViewModel qui contient les informations des contacts de l'utilisateur connecté
         public ActionResult MesContacts()
         {
-            var userId = User.Identity.GetUserId(); // Nécessite using Microsoft.AspNet.Identity;
-            var contacts = _context.Contacts.Where(c => c.UserId == userId).ToList(); // ou UserId selon ta colonne
+            var userId = User.Identity.GetUserId();
+            var contacts = _context.Contacts
+                .Where(c => c.UserId == userId)
+                .Select(c => new ContactViewModel
+                {
+                    Id = c.ContactId,
+                    Nom = c.Nom,
+                    Prenom = c.Prenom,
+                    Email = c.Email,
+                    Telephone = c.NumeroTel
+                    // Ajoute d'autres propriétés si besoin
+                })
+                .ToList();
 
-            return View("MesContacts", contacts); // vue personnalisée
+            return View("MesContacts", contacts);
         }
 
         //Methode pour recuperer les informations d'un contact alors on utilise le nom du contact pour afficher les informations relatives à un contact

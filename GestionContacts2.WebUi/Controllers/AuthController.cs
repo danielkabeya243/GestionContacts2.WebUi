@@ -97,12 +97,12 @@ namespace GestionContacts2.WebUi.Controllers
         {
             var user =  new GestionContacts2.WebUi.Models.ApplicationUser
             {
-                UserName = "newuser@example.com",
-                Email = "newuser@example.com",
-                Name = "New",
-                FirstName = "User",
-                PhoneNumber = "1234567890",
-                BirthDate = new DateTime(1995, 1, 1),
+                UserName = "urieldan@example.com",
+                Email = "urieldan@example.com",
+                Name = "Uriel",
+                FirstName = "Daniel",
+                PhoneNumber = "5147569133",
+                BirthDate = new DateTime(1996, 2, 1),
                 RegistrationDate = DateTime.Now
 
 
@@ -113,10 +113,13 @@ namespace GestionContacts2.WebUi.Controllers
 
             
 
-            var result = await UserManager.CreateAsync(user, "P@ssword123!");
+            var result = await UserManager.CreateAsync(user, "Linuxd123#");
 
                 if (result.Succeeded)
                 {
+
+                    // Ajout de l'utilisateur au rôle "Utilisateur"
+                    await UserManager.AddToRoleAsync(user.Id, "User");
                     return Content("Utilisateur créé avec succès !");
                 }
                 else

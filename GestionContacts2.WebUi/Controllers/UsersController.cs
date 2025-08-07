@@ -60,6 +60,9 @@ namespace GestionContacts2.WebUi.Controllers
 
                 if (result.Succeeded)
                 {
+                    // Ajout de l'utilisateur au rôle "Utilisateur"
+                    await UserManager.AddToRoleAsync(user.Id, "Utilisateur");
+
                     return RedirectToAction("Index"); // Tous les utilisateurs
                 }
 
