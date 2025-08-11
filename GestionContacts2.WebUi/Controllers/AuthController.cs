@@ -72,8 +72,27 @@ namespace GestionContacts2.WebUi.Controllers
             // Si la connexion est réussie, on redirige vers la liste des contacts.
             switch (result)
             {
+
                 case SignInStatus.Success:
-                    return RedirectToAction("TousLesContacts", "Contact");
+                    var user = await UserManager.FindByEmailAsync(model.Email);
+                    if (user != null)
+                    {
+                        // ici on verifie si l'utilisateur est dans le rôle "Admin" si oui alors on affiche la liste des tous les contacts
+                        // sinon on affiche la liste des contacts de l'utilisateur connecté
+
+                        if (await UserManager.IsInRoleAsync(user.Id, "Admin"))
+                        {
+                            return RedirectToAction("TousLesContacts", "Contact");
+                        }
+                        else
+                        {
+                            return RedirectToAction("MesContacts", "Contact");
+                        }
+
+                    }
+
+                    ModelState.AddModelError("", "Utilisateur introuvable.");
+                    return View(model);
 
                 // Si la connexion échoue, on affiche un message d’erreur. 
                 case SignInStatus.Failure:
@@ -97,12 +116,12 @@ namespace GestionContacts2.WebUi.Controllers
         {
             var user =  new GestionContacts2.WebUi.Models.ApplicationUser
             {
-                UserName = "urieldan@example.com",
-                Email = "urieldan@example.com",
-                Name = "Uriel",
-                FirstName = "Daniel",
-                PhoneNumber = "5147569133",
-                BirthDate = new DateTime(1996, 2, 1),
+                UserName = "shiradibula@example.com",
+                Email = "shiradibula@example.com",
+                Name = "Dibula",
+                FirstName = "Shira",
+                PhoneNumber = "4387569133",
+                BirthDate = new DateTime(2003, 8, 22),
                 RegistrationDate = DateTime.Now
 
 
@@ -113,7 +132,7 @@ namespace GestionContacts2.WebUi.Controllers
 
             
 
-            var result = await UserManager.CreateAsync(user, "Linuxd123#");
+            var result = await UserManager.CreateAsync(user, "Shira123#");
 
                 if (result.Succeeded)
                 {

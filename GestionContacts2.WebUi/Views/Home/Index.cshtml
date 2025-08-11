@@ -3,13 +3,19 @@
 }
 
 
+
+@*
+  User.IsInRole("Admin") permet d’afficher certains éléments uniquement aux administrateurs.
+  Les utilisateurs "User" ne verront pas les liens pour gérer les utilisateurs ni pour créer un nouvel utilisateur.
+
+*@
+
 <main class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1 class="display-4">Gestion de contacts</h1>
             <p class="lead">Centralise les utilisateurs et leurs contacts. Commence en te connectant ou en créant un compte.</p>
         </div>
-       
     </div>
 
     @if (!Request.IsAuthenticated)
@@ -26,15 +32,18 @@
     else
     {
         <div class="row g-4 mb-4">
-            <div class="col-md-4">
-                <div class="card shadow-sm rounded-2">
-                    <div class="card-body">
-                        <h5 class="card-title">Utilisateurs</h5>
-                        <p class="card-text">Voir et gérer les utilisateurs inscrits.</p>
-                        <a href="@Url.Action("Index", "Users")" class="btn btn-outline-primary">Gérer les utilisateurs</a>
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="col-md-4">
+                    <div class="card shadow-sm rounded-2">
+                        <div class="card-body">
+                            <h5 class="card-title">Utilisateurs</h5>
+                            <p class="card-text">Voir et gérer les utilisateurs inscrits.</p>
+                            <a href="@Url.Action("Index", "Users")" class="btn btn-outline-primary">Gérer les utilisateurs</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
             <div class="col-md-4">
                 <div class="card shadow-sm rounded-2">
                     <div class="card-body">
@@ -48,9 +57,19 @@
                 <div class="card shadow-sm rounded-2">
                     <div class="card-body">
                         <h5 class="card-title">Actions rapides</h5>
-                        <p class="card-text">Ajouter un utilisateur ou un contact en un clic.</p>
-                        <a href="@Url.Action("Create", "Users")" class="btn btn-sm btn-success me-2">Nouvel utilisateur</a>
-                        <a href="@Url.Action("Create", "Contacts")" class="btn btn-sm btn-success">Nouveau contact</a>
+                        <p class="card-text">
+                            @*Si l'utilisateur est admin alors on affiche une option de plus pour l'ajout d'un nouvel utilisateur'*@
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a href="@Url.Action("Create", "Users")" class="btn btn-sm btn-success me-2">Nouvel utilisateur</a>
+                            }
+                            @if (User.IsInRole("User"))
+                            {
+                                <a href="@Url.Action("Create", "Contacts")" class="btn btn-sm btn-success">Nouveau contact</a>
+                            }
+
+
+                        </p>
                     </div>
                 </div>
             </div>
