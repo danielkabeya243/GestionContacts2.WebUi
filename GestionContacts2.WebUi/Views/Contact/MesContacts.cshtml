@@ -31,9 +31,9 @@ else
                     <td>@contact.Telephone</td>
                     <td>@contact.Email</td>
                     <td>
-                        @Html.ActionLink("Voir", "Details", "Contacts", new { id = contact.Id }, new { @class = "btn btn-info btn-sm" }) |
-                        @Html.ActionLink("Modifier", "Edit", "Contacts", new { id = contact.Id }, new { @class = "btn btn-warning btn-sm" }) |
-                        @Html.ActionLink("Supprimer", "Delete", "Contacts", new { id = contact.Id }, new { @class = "btn btn-danger btn-sm" })
+                        @Html.ActionLink("Voir", "Details", "Contact", new { id = contact.Id }, new { @class = "btn btn-info btn-sm" }) |
+                        @Html.ActionLink("Modifier", "Edit", "Contact", new { id = contact.Id }, new { @class = "btn btn-warning btn-sm" }) |
+                        @Html.ActionLink("Supprimer", "Delete", "Contact", new { id = contact.Id }, new { @class = "btn btn-danger btn-sm" })
                     </td>
                 </tr>
             }
@@ -42,5 +42,5 @@ else
 }
 
 <p>
-    @Html.ActionLink("Ajouter un nouveau contact", "Create", "Contacts", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Ajouter un nouveau contact", "AjouterContact", "Contact", null, new { @class = "btn btn-primary" })
 </p>

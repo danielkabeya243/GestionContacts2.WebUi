@@ -52,15 +52,22 @@ namespace GestionContacts2.WebUi.Controllers
             return View("MesContacts", contacts);
         }
 
-        //Methode pour recuperer les informations d'un contact alors on utilise le nom du contact pour afficher les informations relatives à un contact
-        public ActionResult Details(string nomContact)
+        //Methode pour recuperer les informations d'un contact alors on utilise l'id du contact pour afficher les informations relatives à un contact
+        //Et on utilise l'id pour l'unicité comme ça on est sure que l'on va retourner un seul contact  alors qu'avec le nom du contact
+        /// <summary>
+        /// on peut avoir plusieurs contacts avec le même nom
+        /// et c'est aussi par convention que l'on utilise le id car il est plus performant que la recherche par nom qui est lente 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Details(int id)
         {
             var vm = new DetailsContactViewModel();
 
             using (var context = new AppDbContext())
             {
                 // ici on retourne un contact au lieu d une liste des contacts et on utilise FirstOrDefault car il retournera null si il ne trouve pas la valeur 
-                var contactEntity = context.Contacts.Where(c=>c.Nom == nomContact).FirstOrDefault();
+                 var contactEntity = context.Contacts.FirstOrDefault(c => c.ContactId == id);
 
                 //on doit verifier si il est null ou pas et si il est null on retourne le controleur accueil 
 
@@ -241,7 +248,7 @@ namespace GestionContacts2.WebUi.Controllers
 
                 TempData["SuccessMessage"] = "Le contact a été ajouté avec succès !";
                 // Redirige vers la liste des contacts ou une page de confirmation
-                return RedirectToAction("TousLesContacts");
+                return RedirectToAction("MesContacts");
 
             }
 
