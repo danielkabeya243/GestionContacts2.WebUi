@@ -106,7 +106,7 @@ namespace GestionContacts2.WebUi.Controllers
                 // Si le contact n'est pas trouvé, on peut rediriger vers une page d'erreur ou la liste des contacts
                 if (contact == null)
                 {
-                    return RedirectToAction("TousLesContacts");
+                    return RedirectToAction("MesContacts");
                 }
 
                 // Retourne la vue avec le contact pour afficher les informations actuelles
@@ -135,7 +135,7 @@ namespace GestionContacts2.WebUi.Controllers
                 if (contactExistant == null)
                 {
                     // Redirige si le contact n'est pas trouvé
-                    return RedirectToAction("TousLesContacts");
+                    return RedirectToAction("MesContacts");
                 }
 
                 // Met à jour les propriétés
@@ -152,7 +152,7 @@ namespace GestionContacts2.WebUi.Controllers
                 context.SaveChanges();
 
                 // Redirige vers la liste des contacts
-                return RedirectToAction("TousLesContacts");
+                return RedirectToAction("MesContacts");
             }
         }
 
@@ -209,8 +209,9 @@ namespace GestionContacts2.WebUi.Controllers
         [HttpPost]
         public ActionResult AjouterContact(Contact nouveauContact)
         {
-
+            // Récupère l'ID de l'utilisateur connecté
             string userID = User.Identity.GetUserId();
+            // Associe l'ID de l'utilisateur connecté au nouveau contact
             nouveauContact.UserId = userID;
 
             //ici on verifie que toutes les règles de validation ont été respectées

@@ -44,7 +44,7 @@ namespace GestionContacts2.WebUi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser
+                var user = new Models.ApplicationUser
                 {
                     UserName = model.Email,
                     Email = model.Email,
