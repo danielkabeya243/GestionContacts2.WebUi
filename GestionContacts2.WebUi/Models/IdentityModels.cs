@@ -7,7 +7,7 @@ using GestionContacts2.Data;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace GestionContacts2.WebUi.Models
+/*namespace GestionContacts2.WebUi.Models
 {
     // =======================================
     // CLASSE ApplicationUser
@@ -80,4 +80,4 @@ namespace GestionContacts2.WebUi.Models
             return new ApplicationDbContext();
         }
     }
-}
+}*/

@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using GestionContacts2.WebUi.Models;
+using GestionContacts2.Data;
 
 
 namespace GestionContacts2.WebUi.Controllers

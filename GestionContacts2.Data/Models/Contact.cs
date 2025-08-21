@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace GestionContacts2.Data
 {
     public class Contact
@@ -47,6 +48,6 @@ namespace GestionContacts2.Data
 
        [Required(ErrorMessage = "L'utilisateur associé est obligatoire.")]
         public string UserId { get; set; } // Clé étrangère vers ApplicationUser
-        public virtual ApplicationUser User { get; set; } // Relation avec ApplicationUser
+      public virtual ApplicationUser User { get; set; } // Relation avec ApplicationUser
     }
 }

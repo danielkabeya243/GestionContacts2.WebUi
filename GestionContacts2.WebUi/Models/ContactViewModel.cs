@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using GestionContacts2.Data;
 
 namespace GestionContacts2.WebUi.Models
 {

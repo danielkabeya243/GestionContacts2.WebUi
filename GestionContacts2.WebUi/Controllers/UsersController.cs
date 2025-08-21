@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
 
 
+
 namespace GestionContacts2.WebUi.Controllers
 {
     public class UsersController : Controller
@@ -44,7 +45,7 @@ namespace GestionContacts2.WebUi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new Models.ApplicationUser
+                var user = new ApplicationUser
                 {
                     UserName = model.Email,
                     Email = model.Email,

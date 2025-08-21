@@ -1,21 +1,30 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 
 namespace GestionContacts2.Data
 {
     public class ApplicationUser:IdentityUser
     {
-        public string Nom { get; set; }
-        public string Prenom { get; set; }
-        public DateTime DateInscription { get; set; }
-        public DateTime DateNaissance { get; set; }
-        public string RoleU { get; set; }
+        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public DateTime RegistrationDate { get; set; }
+        public DateTime BirthDate { get; set; }
+       
 
-        
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+        {
+            // Le type d'authentification doit correspondre à celui défini dans CookieAuthenticationOptions.AuthenticationType
+            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+            // Ajoute ici des revendications personnalisées si besoin
+            return userIdentity;
+        }
+
     }
 }

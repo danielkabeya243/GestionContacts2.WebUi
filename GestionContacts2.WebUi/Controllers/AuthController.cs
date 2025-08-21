@@ -111,10 +111,10 @@ namespace GestionContacts2.WebUi.Controllers
             return RedirectToAction("Login");
         }
 
-        [HttpGet]
+       [HttpGet]
         public async Task<ActionResult> RegisterTest()
         {
-            var user =  new GestionContacts2.WebUi.Models.ApplicationUser
+            var user =  new GestionContacts2.Data.ApplicationUser
             {
                 UserName = "shiradibula@example.com",
                 Email = "shiradibula@example.com",
