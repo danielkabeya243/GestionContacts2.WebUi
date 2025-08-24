@@ -147,6 +147,7 @@ namespace GestionContacts2.WebUi.Controllers
                 contactExistant.Entreprise = contactModifie.Entreprise;
                 contactExistant.NotesPersonnelles = contactModifie.NotesPersonnelles;
                 contactExistant.DateModification = DateTime.Now; // Met à jour la date de modification
+                contactExistant.UserId = contactModifie.UserId;
 
                 // Sauvegarde les modifications
                 context.SaveChanges();
@@ -197,6 +198,7 @@ namespace GestionContacts2.WebUi.Controllers
         }
 
         //La methode AjouterContact() sans parametre est appelee lorsque l'utilisateur accède pour la premiere fois à la page de formulaire pour ajouter un contact elle affiche un formulaire vide
+        [Authorize]
         public ActionResult AjouterContact()
         {
             return View();
@@ -207,7 +209,8 @@ namespace GestionContacts2.WebUi.Controllers
         //reçoit les données du formulaire pour effectuer les validations et enregistrer les données en base si elles sont valides.
 
         [HttpPost]
-        public ActionResult AjouterContact(Contact nouveauContact)
+        [Authorize]
+        public ActionResult AjouterContact([Bind(Exclude = "User")] Contact nouveauContact)
         {
             // Récupère l'ID de l'utilisateur connecté
             string userID = User.Identity.GetUserId();
@@ -220,6 +223,8 @@ namespace GestionContacts2.WebUi.Controllers
             {
                 return View(nouveauContact);
             }
+
+            
 
             using (var context = new AppDbContext())
             {
@@ -242,9 +247,20 @@ namespace GestionContacts2.WebUi.Controllers
                 // Ajoute la date de création
                 nouveauContact.DateCreation = DateTime.Now;
 
-                // Ajoute le contact à la base de données
-                context.Contacts.Add(nouveauContact);
-                context.SaveChanges();
+                
+                try
+                {
+                    // Ajoute le contact à la base de données
+                    context.Contacts.Add(nouveauContact);
+                    context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+
+                    ModelState.AddModelError("", "Erreur lors de l'ajout : " + ex.Message);
+                    return View(nouveauContact);
+                }
+               
 
 
                 TempData["SuccessMessage"] = "Le contact a été ajouté avec succès !";

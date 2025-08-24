@@ -8,6 +8,9 @@
 @using (Html.BeginForm("Edit", "Contact", FormMethod.Post))
 {
     @Html.HiddenFor(model => model.ContactId)
+    @*Le champs caché UserID est indispensable pour que la modification fonctionne
+        Sans lui, la modification du contact ne sera pas prise en compte*@
+    @Html.HiddenFor(model => model.UserId)
 
     <div class="form-group mb-3">
         <label>Nom :</label>
@@ -30,10 +33,10 @@
         @Html.ValidationMessageFor(model => model.NumeroTel)
     </div>
     <div class="form-group mb-3">
-    <label>Adresse :</label>
-    @Html.TextAreaFor(model => model.Adresse, 3, 40, new { @class = "form-control" })
-    @Html.ValidationMessageFor(model => model.Adresse)
-     </div>
+        <label>Adresse :</label>
+        @Html.TextAreaFor(model => model.Adresse, 3, 40, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Adresse)
+    </div>
     <div class="form-group mb-3">
         <label>Entreprise :</label>
         @Html.TextBoxFor(model => model.Entreprise, new { @class = "form-control" })

@@ -184,6 +184,10 @@
     <Compile Include="Migrations\202508210615579_MiseAJourApplicationUser.Designer.cs">
       <DependentUpon>202508210615579_MiseAJourApplicationUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202508240411078_SuppressionNavigationUserDansContact.cs" />
+    <Compile Include="Migrations\202508240411078_SuppressionNavigationUserDansContact.Designer.cs">
+      <DependentUpon>202508240411078_SuppressionNavigationUserDansContact.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ContactViewModel.cs" />
@@ -322,6 +326,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202508210615579_MiseAJourApplicationUser.resx">
       <DependentUpon>202508210615579_MiseAJourApplicationUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508240411078_SuppressionNavigationUserDansContact.resx">
+      <DependentUpon>202508240411078_SuppressionNavigationUserDansContact.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
