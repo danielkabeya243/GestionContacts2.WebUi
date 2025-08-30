@@ -276,6 +276,7 @@
     <Content Include="Views\Auth\Login.cshtml" />
     <Content Include="Views\Users\Create.cshtml" />
     <Content Include="Views\Contact\MesContacts.cshtml" />
+    <Content Include="Views\Users\TousLesUtilisateurs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
