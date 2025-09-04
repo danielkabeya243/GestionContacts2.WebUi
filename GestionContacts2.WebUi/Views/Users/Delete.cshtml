@@ -1,0 +1,20 @@
+﻿@model GestionContacts2.Data.ApplicationUser
+@{
+    ViewBag.Title = "Supprimer un utilisateur";
+}
+
+<h2>Supprimer un utilisateur</h2>
+
+<p>
+    Es-tu sûr de vouloir supprimer l'utilisateur :
+    <strong>@Model.UserName (@Model.Name @Model.FirstName)</strong> ?
+</p>
+
+@using (Html.BeginForm("DeleteUserConfirmed", "Users", FormMethod.Post))
+{
+    @Html.Hidden("UserId", Model.Id)
+    <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
+    <a href="@Url.Action("TousLesUtilisateurs", "Users")" class="btn btn-secondary">Annuler</a>
+}
+
+

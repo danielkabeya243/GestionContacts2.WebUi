@@ -1,7 +1,54 @@
-﻿
+﻿@model IEnumerable<GestionContacts2.Data.ApplicationUser>
 @{
     ViewBag.Title = "TousLesUtilisateurs";
 }
 
-<h2>TousLesUtilisateurs</h2>
+<h2>Tous Les Utilisateurs</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>FirstName</th>
+            <th>BirthDate</th>
+            <th>Email</th>
+            <th>Email</th>
+            <th>PhoneNumber</th>
+            <th>Registration Date</th>
+            <th>EmailConfirmed</th>
+
+
+
+        </tr>
+
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.FirstName</td>
+                <td>@user.BirthDate.ToShortDateString()</td>
+                <td>@user.Email</td>
+                <td>@user.UserName</td>
+                <td>@user.PhoneNumber</td>
+                <td>@user.RegistrationDate.ToShortDateString()</td>
+                <td>@(user.EmailConfirmed ? "Oui" : "Non")</td>
+
+                <td>
+                    <a href="@Url.Action("Delete", "Users", new { id = user.Id })" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
+                        Supprimer
+                    </a>
+                </td>
+
+            </tr>
+        }
+
+
+
+    </tbody>
+
+
+</table>
+
 

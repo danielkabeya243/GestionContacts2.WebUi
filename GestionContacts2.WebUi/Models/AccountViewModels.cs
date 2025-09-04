@@ -82,6 +82,11 @@ namespace GestionContacts2.WebUi.Models
         public string ConfirmPassword { get; set; }
 
         // On étend la classe RegisterViewModel en ajoutant des Nouvelles propriétés personnalisées 
+
+        [Required]
+        [Display(Name = "Nom d'utilisateur")]
+        public string UserName { get; set; }
+
         [Required]
         [Display(Name = "Nom")]
         public string Name { get; set; }

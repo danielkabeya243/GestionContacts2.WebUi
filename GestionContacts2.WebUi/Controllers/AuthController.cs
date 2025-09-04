@@ -138,7 +138,7 @@ namespace GestionContacts2.WebUi.Controllers
                 {
 
                     // Ajout de l'utilisateur au rôle "Utilisateur"
-                    await UserManager.AddToRoleAsync(user.Id, "Admin");
+                    await UserManager.AddToRoleAsync(user.Id, "Admin ");
                     return Content("Utilisateur créé avec succès !");
                 }
                 else

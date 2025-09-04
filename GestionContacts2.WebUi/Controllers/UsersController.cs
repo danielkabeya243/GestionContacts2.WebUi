@@ -25,6 +25,11 @@ namespace GestionContacts2.WebUi.Controllers
         private ApplicationUserManager _userManager;
         private readonly AppDbContext _context;
 
+        //On intialise le contexte de la base de données dans le contructeur
+        public UsersController()
+        {
+            _context = new AppDbContext();
+        }
         public ApplicationUserManager UserManager
         {
             get => _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -56,7 +61,7 @@ namespace GestionContacts2.WebUi.Controllers
             {
                 var user = new ApplicationUser
                 {
-                    UserName = model.Email,
+                    UserName = model.UserName,
                     Email = model.Email,
                     Name = model.Name,
                     FirstName = model.FirstName,
@@ -155,6 +160,47 @@ namespace GestionContacts2.WebUi.Controllers
 
                 return Content("Erreur : " + fullError.ToString());
             }
+        }
+
+        [HttpGet]
+        public ActionResult Delete(string id)
+        {
+            using (var context = new AppDbContext())
+            {
+                var user = context.Users.FirstOrDefault(u => u.Id == id);
+                if (user == null)
+                {
+                    return RedirectToAction("TousLesUtilisateurs");
+                }
+                return View(user); // Affiche la vue de confirmation
+            }
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteUserConfirmed(string id)
+        {
+
+            using (var context = new AppDbContext())
+            {
+                // ici on retourne un contact au lieu d une liste des contacts et on utilise FirstOrDefault car il retournera null si il ne trouve pas la valeur 
+                var user = context.Users.FirstOrDefault(u => u.Id == id);
+
+                //on doit verifier si il est null ou pas et si il est null on retourne le controleur accueil 
+
+                if (user != null)
+                {
+                    context.Users.Remove(user);
+                    context.SaveChanges();
+                }
+
+
+                return RedirectToAction("TousLesUtilisateurs");
+
+            }
+
+
+
         }
 
 
