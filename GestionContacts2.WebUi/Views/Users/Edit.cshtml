@@ -1,0 +1,55 @@
+﻿@model GestionContacts2.Data.ApplicationUser
+@{
+    ViewBag.Title = "Modifier l'utilisateur";
+}
+
+<h2>Edit</h2>
+@using (Html.BeginForm("Edit", "Users", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @*Le champs caché UserID est indispensable pour que la modification fonctionne
+        Sans lui, la modification du contact ne sera pas prise en compte*@
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group mb-3">
+        <label>Nom :</label>
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+    <div class="form-group mb-3">
+        <label>Prénom :</label>
+        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.FirstName)
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Nom d'utilisateur' :</label>
+        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.UserName)
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Email :</label>
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Email)
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Date de Naissance :</label>
+        @Html.TextBoxFor(model => model.BirthDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(model => model.BirthDate)
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Numéro de téléphone :</label>
+        @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.PhoneNumber)
+    </div>
+
+
+
+
+    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+}
+
+

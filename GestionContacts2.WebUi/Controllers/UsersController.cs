@@ -202,6 +202,69 @@ namespace GestionContacts2.WebUi.Controllers
 
 
         }
+        //Dans la methode get on recupere l id de l'utilisateur a modifier et on retourne la vue avec les informations actuelles du contact
+
+        [HttpGet]
+        public ActionResult Edit(string id)
+        {
+
+            using (var context = new AppDbContext())
+            {
+                // Récupère le contact à modifier par son ID
+                var user = context.Users.FirstOrDefault(u => u.Id == id);
+
+                // Si le contact n'est pas trouvé, on peut rediriger vers une page d'erreur ou la liste des contacts
+                if (user == null)
+                {
+                    return RedirectToAction("TousLesUtilisateurs");
+                }
+
+                // Retourne la vue avec le contact pour afficher les informations actuelles
+                return View(user);
+
+
+            }
+
+        }
+        //Le formulaire POST transmet les modifications apportées au contact et on met a jour la base de donnee
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ApplicationUser userModifie)
+        {
+            if (!ModelState.IsValid)
+            {
+                // Retourne la vue avec le modèle pour afficher les messages d’erreur
+                return View(userModifie);
+            }
+
+            using (var context = new AppDbContext())
+            {
+                // Récupère l'utilisateur existant dans la base de données
+                var userExistant = context.Users.FirstOrDefault(u => u.Id ==userModifie.Id);
+
+                if (userExistant == null)
+                {
+                    // Redirige si l'utilisateurs n'est pas trouvé
+                    return RedirectToAction("TousLesUtilisateurs");
+                }
+
+                // Met à jour les propriétés
+                userExistant.Name = userModifie.Name;
+                userExistant.FirstName = userModifie.FirstName;
+                userExistant.UserName = userModifie.UserName;
+                userExistant.Email = userModifie.Email;
+                userExistant.PhoneNumber = userModifie.PhoneNumber;
+                userExistant.BirthDate = userModifie.BirthDate;
+             
+                // Sauvegarde les modifications
+                context.SaveChanges();
+
+                // Redirige vers la liste des utilisateurs
+                return RedirectToAction("TousLesUtilisateurs");
+            }
+        }
+
 
 
 

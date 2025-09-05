@@ -10,9 +10,10 @@
     <strong>@Model.UserName (@Model.Name @Model.FirstName)</strong> ?
 </p>
 
-@using (Html.BeginForm("DeleteUserConfirmed", "Users", FormMethod.Post))
+@using (Html.BeginForm("Delete", "Users", FormMethod.Post))
 {
-    @Html.Hidden("UserId", Model.Id)
+    @Html.AntiForgeryToken()
+    @Html.Hidden("id", Model.Id)
     <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
     <a href="@Url.Action("TousLesUtilisateurs", "Users")" class="btn btn-secondary">Annuler</a>
 }

@@ -8,6 +8,7 @@
 
 @using (Html.BeginForm("DeleteContactConfirmed", "Contact", FormMethod.Post))
 {
+  
     @Html.Hidden("ContactId", Model.ContactId)
     <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
     <a href="@Url.Action("TousLesContacts", "Contact")" class="btn btn-secondary">Annuler</a>
