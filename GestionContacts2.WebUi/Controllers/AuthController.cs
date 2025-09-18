@@ -34,6 +34,8 @@ namespace GestionContacts2.WebUi.Controllers
             SignInManager = signInManager;
         }
 
+
+
         //Si _signInManager est null, on va le récupérer depuis OWIN (le système de gestion d’authentification de ASP.NET).
         public ApplicationSignInManager SignInManager
         {
@@ -218,6 +220,108 @@ namespace GestionContacts2.WebUi.Controllers
         private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
 
         // GET: Auth
+        [HttpGet]
+        public ActionResult ResetPassword(string email)
+        {
+            using (var context = new AppDbContext())
+            {
+                // Récupère le contact à modifier par son ID
+                var user = context.Users.FirstOrDefault(u => u.Email == email);
+
+                // Si le contact n'est pas trouvé, on peut rediriger vers une page d'erreur ou la liste des contacts
+                if (user == null)
+                {
+                    return RedirectToAction("Login");
+                }
+
+                // Retourne la vue avec le contact pour afficher les informations actuelles
+                return View(user);
+
+
+            }
+
+            
+        }
+
+        [HttpPost]
+      
+        public ActionResult ResetPasswordPost(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                // Retourne la vue avec le modèle pour afficher les messages d’erreur
+                return View(model);
+            }
+            var user = UserManager.FindByEmail(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Utilisateur introuvable.");
+                return View(model);
+            }
+
+            // Utilise le token reçu (model.Code) et le nouveau mot de passe (model.Password)
+            var result = UserManager.ResetPassword(user.Id, model.Code, model.Password);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error);
+                }
+                return View(model);
+            }
+
+
+        }
+
+        //Cette action affiche la vue pour que l’utilisateur puisse entrer son email afin de recevoir les instructions pour réinitialiser son mot de passe.
+        // L'utilisateur entre son email, et on lui envoie un email avec un lien pour réinitialiser son mot de passe.
+        //Si le courriel n'existe pas dans la base de données, on ne révèle pas cette information pour des raisons de sécurité.
+        //Si le courriel existe, on génère un token de réinitialisation et on envoie un email avec un lien contenant ce token.
+
+        [HttpGet]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    // Ne pas révéler que l'utilisateur n'existe pas ou n'est pas confirmé
+                    return View("ForgotPasswordConfirmation");
+                }
+                // Générer le token de réinitialisation du mot de passe
+                var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Auth", new { code, email = user.Email }, protocol: Request.Url.Scheme);
+                // Envoyer l'email avec le lien de réinitialisation
+                await UserManager.SendEmailAsync(user.Id, "Réinitialiser le mot de passe",
+                   $"Veuillez réinitialiser votre mot de passe en cliquant <a href=\"{callbackUrl}\">ici</a>");
+                return RedirectToAction("ForgotPasswordConfirmation", "Auth");
+            }
+            // Si on arrive là, c'est qu'il y a une erreur dans le modèle
+            return View(model);
+        }
+
+        //Montrer une confirmation que les instructions de réinitialisation du mot de passe ont été envoyées.
+        [HttpGet]
+        public ActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+
+
         public ActionResult Index()
         {
             return View();

@@ -38,6 +38,7 @@
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <button type="submit" class="btn btn-primary">Se connecter</button>
+            @Html.ActionLink("Mot de passe oublié ?", "ForgotPassword", "Auth", null, new { @class = "btn btn-link" })
         </div>
     </div>
     <p>@ViewBag.Test</p>
