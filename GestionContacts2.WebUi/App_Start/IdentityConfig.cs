@@ -11,15 +11,27 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using GestionContacts2.Data;
+using System.Net.Mail;
 
 namespace GestionContacts2.WebUi
 {
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        // Envoyer un e-mail en utilisant votre service e-mail ici.
+
+        public async Task SendAsync(IdentityMessage message)
         {
             // Connectez votre service e-mail ici pour envoyer un e-mail.
-            return Task.FromResult(0);
+
+            var smtp = new SmtpClient();
+            var mail = new MailMessage("kabeyadaniel27@gmail.com", message.Destination)
+            {
+                Subject = message.Subject,
+                Body = message.Body,
+                IsBodyHtml = true
+            };
+            await smtp.SendMailAsync(mail);
+            
         }
     }
 

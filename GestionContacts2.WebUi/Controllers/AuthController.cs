@@ -10,6 +10,8 @@ using System.Web;
 using System.Web.Mvc;
 using GestionContacts2.Data;
 using System.Text;
+using System.Net;
+using System.Net.Mail;
 
 namespace GestionContacts2.WebUi.Controllers
 {
@@ -66,42 +68,35 @@ namespace GestionContacts2.WebUi.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            //Ici on essaie de connecter l'utilisateur par son email , mot de passe, se souvenir de moi , shouldLockout: false : on ne verrouille pas le compte après plusieurs échecs.
+            // Récupère l'utilisateur par email
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Utilisateur introuvable.");
+                return View(model);
+            }
 
+            // Utilise le UserName pour la connexion
             var result = await SignInManager.PasswordSignInAsync(
-                model.Email, model.Password, model.RememberMe, shouldLockout: false);
+                user.UserName, model.Password, model.RememberMe, shouldLockout: false);
 
-            // Si la connexion est réussie, on redirige vers la liste des contacts.
             switch (result)
             {
-
                 case SignInStatus.Success:
-                    var user = await UserManager.FindByEmailAsync(model.Email);
-                    if (user != null)
+                    if (await UserManager.IsInRoleAsync(user.Id, "Admin"))
                     {
-                        // ici on verifie si l'utilisateur est dans le rôle "Admin" si oui alors on affiche la liste des tous les contacts
-                        // sinon on affiche la liste des contacts de l'utilisateur connecté
-
-                        if (await UserManager.IsInRoleAsync(user.Id, "Admin"))
-                        {
-                            return RedirectToAction("TousLesContacts", "Contact");
-                        }
-                        else
-                        {
-                            return RedirectToAction("MesContacts", "Contact");
-                        }
-
+                        return RedirectToAction("TousLesContacts", "Contact");
                     }
-
-                    ModelState.AddModelError("", "Utilisateur introuvable.");
-                    return View(model);
-
-                // Si la connexion échoue, on affiche un message d’erreur. 
+                    else
+                    {
+                        return RedirectToAction("MesContacts", "Contact");
+                    }
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Tentative de connexion invalide.");
                     return View(model);
             }
+
         }
 
 
@@ -221,46 +216,43 @@ namespace GestionContacts2.WebUi.Controllers
 
         // GET: Auth
         [HttpGet]
-        public ActionResult ResetPassword(string email)
+        public ActionResult ResetPassword(string code,string email)
         {
-            using (var context = new AppDbContext())
+            if (string.IsNullOrEmpty(code) || string.IsNullOrEmpty(email))
             {
-                // Récupère le contact à modifier par son ID
-                var user = context.Users.FirstOrDefault(u => u.Email == email);
-
-                // Si le contact n'est pas trouvé, on peut rediriger vers une page d'erreur ou la liste des contacts
-                if (user == null)
-                {
-                    return RedirectToAction("Login");
-                }
-
-                // Retourne la vue avec le contact pour afficher les informations actuelles
-                return View(user);
-
-
+                return RedirectToAction("Login");
             }
 
-            
+            // ici on crée un modèle pour passer l'email et le code à la vue au lieu de retourner application user directement
+            //Car cela va generer une erreur 
+            var model = new ResetPasswordViewModel
+            {
+                Email = email,
+                Code = code
+            };
+            return View(model);
         }
 
         [HttpPost]
-      
+        [ValidateAntiForgeryToken]
         public ActionResult ResetPasswordPost(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 // Retourne la vue avec le modèle pour afficher les messages d’erreur
-                return View(model);
+                return View("ResetPassword",model);
             }
+
+            model.Code = HttpUtility.UrlDecode(model.Code);
             var user = UserManager.FindByEmail(model.Email);
             if (user == null)
             {
                 ModelState.AddModelError("", "Utilisateur introuvable.");
-                return View(model);
+                return View("ResetPassword",model);
             }
 
             // Utilise le token reçu (model.Code) et le nouveau mot de passe (model.Password)
-            var result = UserManager.ResetPassword(user.Id, model.Code, model.Password);
+            var result = UserManager.ResetPassword(user.Id, HttpUtility.UrlDecode(model.Code), model.Password);
 
             if (result.Succeeded)
             {
@@ -272,7 +264,7 @@ namespace GestionContacts2.WebUi.Controllers
                 {
                     ModelState.AddModelError("", error);
                 }
-                return View(model);
+                return View("ResetPassword",model);
             }
 
 
@@ -303,7 +295,13 @@ namespace GestionContacts2.WebUi.Controllers
                 }
                 // Générer le token de réinitialisation du mot de passe
                 var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Auth", new { code, email = user.Email }, protocol: Request.Url.Scheme);
+                // Construire le lien de réinitialisation correct
+                var callbackUrl = Url.Action(
+                    "ResetPassword",      // action
+                    "Auth",               // controller
+                    new { code = HttpUtility.UrlEncode(code), email = user.Email },// paramètres
+                    protocol: Request.Url.Scheme              // http ou https automatiquement
+                );
                 // Envoyer l'email avec le lien de réinitialisation
                 await UserManager.SendEmailAsync(user.Id, "Réinitialiser le mot de passe",
                    $"Veuillez réinitialiser votre mot de passe en cliquant <a href=\"{callbackUrl}\">ici</a>");
@@ -321,6 +319,23 @@ namespace GestionContacts2.WebUi.Controllers
         }
 
 
+        public ActionResult TestEmail()
+        {
+            try
+            {
+                var smtp = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    Credentials = new NetworkCredential("kabeyadaniel27@gmail.com", "hruxovonrmxumgee"),
+                    EnableSsl = true
+                };
+                smtp.Send("kabeyadaniel27@gmail.com", "danielkabeya243@outlook.com", "Test SMTP", "Ceci est un test.");
+                return Content("Email envoyé avec succès !");
+            }
+            catch (Exception ex)
+            {
+                return Content("Erreur lors de l'envoi : " + ex.Message);
+            }
+        }
 
         public ActionResult Index()
         {
