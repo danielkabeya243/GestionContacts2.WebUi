@@ -16,7 +16,8 @@ namespace GestionContacts2.Data
         public string FirstName { get; set; }
         public DateTime RegistrationDate { get; set; }
         public DateTime BirthDate { get; set; }
-       
+     
+
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

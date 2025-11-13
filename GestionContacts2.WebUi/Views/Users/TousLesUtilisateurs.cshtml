@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GestionContacts2.Data.ApplicationUser>
+﻿@model IEnumerable<GestionContacts2.WebUi.Models.UtilisateurAvecRolesViewModel>
 @{
     ViewBag.Title = "TousLesUtilisateurs";
 }
@@ -15,45 +15,35 @@
             <th>PhoneNumber</th>
             <th>Registration Date</th>
             <th>EmailConfirmed</th>
+            <th>Rôles</th>
             <th>Actions</th>
-
-
-
         </tr>
-
     </thead>
     <tbody>
         @foreach (var user in Model)
         {
             <tr>
-                <td>@user.Name</td>
-                <td>@user.FirstName</td>
-                <td>@user.BirthDate.ToShortDateString()</td>
-                <td>@user.Email</td>
-                <td>@user.UserName</td>
-                <td>@user.PhoneNumber</td>
-                <td>@user.RegistrationDate.ToShortDateString()</td>
-                <td>@(user.EmailConfirmed ? "Oui" : "Non")</td>
-
+                <td>@user.Utilisateur.Name</td>
+                <td>@user.Utilisateur.FirstName</td>
+                <td>@user.Utilisateur.BirthDate.ToShortDateString()</td>
+                <td>@user.Utilisateur.Email</td>
+                <td>@user.Utilisateur.UserName</td>
+                <td>@user.Utilisateur.PhoneNumber</td>
+                <td>@user.Utilisateur.RegistrationDate.ToShortDateString()</td>
+                <td>@(user.Utilisateur.EmailConfirmed ? "Oui" : "Non")</td>
+                <td>@string.Join(", ", user.Roles)</td>
                 <td>
-                    <a href="@Url.Action("Delete", "Users", new { id = user.Id })" class="btn btn-danger btn-sm"
+                    <a href="@Url.Action("Delete", "Users", new { id = user.Utilisateur.Id })" class="btn btn-danger btn-sm"
                        onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
-                        <i class="bi bi-trash"></i>  Supprimer
+                        <i class="bi bi-trash"></i> Supprimer
                     </a>
-                    <a href="@Url.Action("Edit", "Users", new { id = user.Id })" class="btn btn-primary btn-sm">
-                       <i class="bi bi-pencil"></i> Modifier
+                    <a href="@Url.Action("Edit", "Users", new { id = user.Utilisateur.Id })" class="btn btn-primary btn-sm">
+                        <i class="bi bi-pencil"></i> Modifier
                     </a>
-
                 </td>
-
             </tr>
         }
-
-
-
     </tbody>
-
-
 </table>
 
 

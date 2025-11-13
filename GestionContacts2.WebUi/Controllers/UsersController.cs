@@ -36,12 +36,22 @@ namespace GestionContacts2.WebUi.Controllers
             private set => _userManager = value;
         }
 
+        //cette methode retourne la liste de tous les utilisateurs avec leurs roles
         public ActionResult TousLesUtilisateurs()
         {
-            var listUtilisateurs = _context.Users.ToList();
 
-            //On retourne la vue pour la liste des contacts
-            return View(listUtilisateurs);
+            var users = _context.Users.ToList();
+            var userManager = UserManager;
+
+            var model = users.Select(u => new UtilisateurAvecRolesViewModel
+            {
+                Utilisateur = u,
+                Roles = userManager.GetRoles(u.Id)
+            }).ToList();
+
+            return View(model);
+
+           
         }
 
         //
