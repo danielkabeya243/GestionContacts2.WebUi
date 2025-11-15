@@ -46,7 +46,7 @@ namespace GestionContacts2.Data
         public DateTime? DateModification { get; set; }
 
 
-       [Required(ErrorMessage = "L'utilisateur associé est obligatoire.")]
+       //[Required(ErrorMessage = "L'utilisateur associé est obligatoire.")]
         public string UserId { get; set; } // Clé étrangère vers ApplicationUser
       //public virtual ApplicationUser User { get; set; } // Relation avec ApplicationUser
     }

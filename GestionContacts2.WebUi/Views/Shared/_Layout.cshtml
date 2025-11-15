@@ -22,12 +22,28 @@
                     <li>@Html.ActionLink("Accueil", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("À propos de", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+
+                    @if(User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Utilisateurs","TousLesUtilisateurs", "Users",null, new {@class="nav-link"})</li>
+                    }
                 </ul>
                  @Html.Partial("_LoginPartial")
             </div>
         </div>
     </nav>
     <div class="container body-content">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+
+
+
         @RenderBody()
         <hr />
         <footer>

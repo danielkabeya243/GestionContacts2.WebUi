@@ -13,8 +13,7 @@
 
 @using (Html.BeginForm("AjouterContact", "Contact", FormMethod.Post))
 {
-    @Html.HiddenFor(model => model.UserId)
-    @Html.ValidationSummary(true)
+   
 
     <div class="form-group mb-3">
         <label>Nom :</label>

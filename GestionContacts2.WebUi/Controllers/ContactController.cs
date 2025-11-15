@@ -219,6 +219,9 @@ namespace GestionContacts2.WebUi.Controllers
 
             //ici on verifie que toutes les règles de validation ont été respectées
             //si une règle est violée modelstate.isvalid renverra false
+
+            ModelState.Remove("UserId");
+
             if (!ModelState.IsValid)
             {
                 return View(nouveauContact);
