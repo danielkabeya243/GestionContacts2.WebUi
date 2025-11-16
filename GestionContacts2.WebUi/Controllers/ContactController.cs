@@ -22,12 +22,26 @@ namespace GestionContacts2.WebUi.Controllers
             _context = new AppDbContext();
         }
         // GET: Contact
+        //ici on fait une jointure entre la table contacts et users pour recuperer les informations de l'utilisateur qui a cree le contact
         public ActionResult TousLesContacts()
         {
-            var listContacts = _context.Contacts.ToList();
+             var model = _context.Contacts
+             .Join(_context.Users, c => c.UserId, u => u.Id, (c, u) => new ContactAdminViewModel
+             {
+                 Id = c.ContactId,
+                 Nom = c.Nom,
+                 Prenom = c.Prenom,
+                 Email = c.Email,
+                 Telephone = c.NumeroTel,
+                 Adresse = c.Adresse,
+                 Entreprise = c.Entreprise,
+                 NotesPersonnelles = c.NotesPersonnelles,
+                 UtilisateurEmail = u.Email,
+                 UtilisateurNom = u.Name
+             }).ToList();
 
             //On retourne la vue pour la liste des contacts
-            return View(listContacts);
+            return View(model);
         }
 
         [Authorize]
