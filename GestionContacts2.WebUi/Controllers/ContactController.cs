@@ -23,24 +23,38 @@ namespace GestionContacts2.WebUi.Controllers
         }
         // GET: Contact
         //ici on fait une jointure entre la table contacts et users pour recuperer les informations de l'utilisateur qui a cree le contact
-        public ActionResult TousLesContacts()
+        public ActionResult TousLesContacts(string recherche)
         {
-             var model = _context.Contacts
-             .Join(_context.Users, c => c.UserId, u => u.Id, (c, u) => new ContactAdminViewModel
-             {
-                 Id = c.ContactId,
-                 Nom = c.Nom,
-                 Prenom = c.Prenom,
-                 Email = c.Email,
-                 Telephone = c.NumeroTel,
-                 Adresse = c.Adresse,
-                 Entreprise = c.Entreprise,
-                 NotesPersonnelles = c.NotesPersonnelles,
-                 UtilisateurEmail = u.Email,
-                 UtilisateurNom = u.Name
-             }).ToList();
 
-            //On retourne la vue pour la liste des contacts
+
+            if (Request.HttpMethod == "GET" && Request.QueryString.AllKeys.Contains("recherche") && string.IsNullOrWhiteSpace(recherche))
+            {
+                ViewBag.MessageErreur = "Le champ recherche ne peut pas être vide.";
+            }
+
+            // On filtre d'abord les contacts selon la recherche
+            var contactsFiltres = string.IsNullOrEmpty(recherche)
+                ? _context.Contacts.ToList()
+                : _context.Contacts
+                    .Where(u => u.Prenom.Contains(recherche) || u.Nom.Contains(recherche) || u.Email.Contains(recherche))
+                    .ToList();
+
+            // On fait la jointure uniquement sur les contacts filtrés
+            var model = contactsFiltres
+                .Join(_context.Users, c => c.UserId, u => u.Id, (c, u) => new ContactAdminViewModel
+                {
+                    Id = c.ContactId,
+                    Nom = c.Nom,
+                    Prenom = c.Prenom,
+                    Email = c.Email,
+                    Telephone = c.NumeroTel,
+                    Adresse = c.Adresse,
+                    Entreprise = c.Entreprise,
+                    NotesPersonnelles = c.NotesPersonnelles,
+                    UtilisateurEmail = u.Email,
+                    UtilisateurNom = u.Name
+                }).ToList();
+
             return View(model);
         }
 
@@ -296,6 +310,12 @@ namespace GestionContacts2.WebUi.Controllers
         {
             using (var context = new AppDbContext())
             {
+
+                if (Request.HttpMethod == "GET" && Request.QueryString.AllKeys.Contains("recherche") && string.IsNullOrWhiteSpace(recherche))
+                {
+                    ViewBag.MessageErreur = "Le champ recherche ne peut pas être vide.";
+                }
+
 
                 List<Contact> resultats;
                 if (string.IsNullOrEmpty(recherche))

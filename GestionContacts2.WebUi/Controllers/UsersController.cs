@@ -36,13 +36,23 @@ namespace GestionContacts2.WebUi.Controllers
             private set => _userManager = value;
         }
 
-        //cette methode retourne la liste de tous les utilisateurs avec leurs roles
-        public ActionResult TousLesUtilisateurs()
+        //cette methode retourne la liste de tous les utilisateurs avec leurs roles mais aussi
+        //elle permet de faire une recherche par nom , prenom ou email
+        public ActionResult TousLesUtilisateurs(string recherche)
         {
 
-            var users = _context.Users.ToList();
-            var userManager = UserManager;
+            if (Request.HttpMethod == "GET" && Request.QueryString.AllKeys.Contains("recherche") && string.IsNullOrWhiteSpace(recherche))
+            {
+                ViewBag.MessageErreur = "Le champ recherche ne peut pas être vide.";
+            }
 
+            var users = string.IsNullOrEmpty(recherche)
+        ? _context.Users.ToList()
+        : _context.Users
+            .Where(u => u.FirstName.Contains(recherche) || u.Name.Contains(recherche) || u.Email.Contains(recherche))
+            .ToList();
+
+            var userManager = UserManager;
             var model = users.Select(u => new UtilisateurAvecRolesViewModel
             {
                 Utilisateur = u,
@@ -273,6 +283,34 @@ namespace GestionContacts2.WebUi.Controllers
                 // Redirige vers la liste des utilisateurs
                 return RedirectToAction("TousLesUtilisateurs");
             }
+        }
+
+        [HttpGet]
+        public ActionResult FindUser(string recherche)
+        {
+            using (var context = new AppDbContext())
+            {
+
+                List<ApplicationUser> resultats;
+                if (string.IsNullOrEmpty(recherche))
+                {
+                    resultats = new List<ApplicationUser>();
+                }
+                else
+                {
+                    resultats = context.Users
+                   .Where(c => c.FirstName.Contains(recherche) || c.Name.Contains(recherche) || c.Email.Contains(recherche))
+                   .ToList();
+
+                }
+                //Ici on verifie si la valeur de recherche correspond au nom , au prenom ou a l'email si cela correspond on retourne la valeur sous forme de liste
+
+
+                return View(resultats);
+            }
+
+
+           
         }
 
 

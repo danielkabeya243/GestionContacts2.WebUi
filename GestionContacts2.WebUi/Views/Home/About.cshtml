@@ -1,9 +1,27 @@
 ﻿@{
     ViewBag.Title = "About";
 }
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
 
-    <p>Use this area to provide additional information.</p>
+<main aria-labelledby="title">
+    <h2 id="title" class="mb-3">@ViewBag.Title</h2>
+    <h4 class="mb-4">@ViewBag.Message</h4>
+
+    <p>
+        Cette application permet de gérer efficacement vos contacts personnels et professionnels.<br />
+        Vous pouvez ajouter, modifier, supprimer et rechercher des contacts, ainsi qu’associer chaque contact à un utilisateur.<br />
+        Les administrateurs disposent de fonctionnalités avancées : gestion des utilisateurs, attribution de rôles, visualisation de tous les contacts et de leur propriétaire.<br />
+        L’interface est conçue pour être simple, moderne et accessible à tous.
+    </p>
+    <p>
+        <strong>Fonctionnalités principales :</strong>
+        <ul>
+            <li>Gestion complète des contacts (CRUD)</li>
+            <li>Gestion des utilisateurs et des rôles</li>
+            <li>Recherche et filtrage avancés</li>
+            <li>Interface responsive et sécurisée</li>
+        </ul>
+    </p>
+    <p>
+        Pour toute question ou suggestion, n’hésitez pas à nous contacter via la page <a href="@Url.Action("Contact", "Home")">Contact</a>.
+    </p>
 </main>

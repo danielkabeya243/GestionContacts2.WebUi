@@ -1,19 +1,52 @@
 ﻿@{
     ViewBag.Title = "Contact";
+    ViewBag.Message = "Nous sommes à votre écoute !";
 }
+
 <main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h2 id="title" class="mb-3 text-center">@ViewBag.Title</h2>
+                    <h4 class="mb-4 text-center">@ViewBag.Message</h4>
 
-    <address>
-        One Microsoft Way<br />
-        Redmond, WA 98052-6399<br />
-        <abbr title="Phone">P:</abbr>
-        425.555.0100
-    </address>
+                    <div class="mb-4">
+                        <h5>Adresse</h5>
+                        <address>
+                            2040 Wildflower Dr<br />
+                            Ottawa, Ontario<br />
+                            <abbr title="Phone">Téléphone :</abbr> 343-598-5852
+                        </address>
+                    </div>
 
-    <address>
-        <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-        <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-    </address>
+                    <div class="mb-4">
+                        <h5>Contacts</h5>
+                        <address>
+                            <strong>Support :</strong>
+                            <a href="mailto:danielkabeya243@outlook.com">danielkabeya243@outlook.com</a><br />
+                            <strong>Marketing :</strong>
+                            <a href="mailto:danielkabeya243@outlook.com">danielkabeya243@outlook.com</a>
+                        </address>
+                    </div>
+
+                    <!-- Exemple de formulaire de contact (optionnel) -->
+                    <!--
+                    <h5>Envoyez-nous un message</h5>
+                    <form>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Votre email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Votre adresse email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="3" placeholder="Votre message"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </form>
+                    -->
+                </div>
+            </div>
+        </div>
+    </div>
 </main>

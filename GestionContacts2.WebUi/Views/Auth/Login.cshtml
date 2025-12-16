@@ -3,44 +3,42 @@
     ViewBag.Title = "Connexion";
 }
 
-<h2>Connexion</h2>
 
 
-@using (Html.BeginForm("Login", "Auth", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
+<div class="d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="card shadow" style="min-width:350px; max-width:400px; width:100%;">
+        <div class="card-body">
+            <h2 class="text-center mb-4">Connexion</h2>
+            @using (Html.BeginForm("Login", "Auth", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                <div class="form-group mb-3">
+                    @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-3">
+                    @Html.LabelFor(m => m.Password, new { @class = "form-label" })
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <div class="form-check">
+                        @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input" })
+                        @Html.LabelFor(m => m.RememberMe, new { @class = "form-check-label" })
+                    </div>
+                </div>
+
+                <div class="form-group mb-3 text-center">
+                    <button type="submit" class="btn btn-primary">Se connecter</button>
+                    @Html.ActionLink("Mot de passe oublié ?", "ForgotPassword", "Auth", null, new { @class = "btn btn-link" })
+                </div>
+                <p class="text-center">@ViewBag.Test</p>
+            }
         </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.Password, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <div class="checkbox">
-                @Html.CheckBoxFor(m => m.RememberMe)
-                @Html.LabelFor(m => m.RememberMe)
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <button type="submit" class="btn btn-primary">Se connecter</button>
-            @Html.ActionLink("Mot de passe oublié ?", "ForgotPassword", "Auth", null, new { @class = "btn btn-link" })
-        </div>
-    </div>
-    <p>@ViewBag.Test</p>
-}
+</div>
 
