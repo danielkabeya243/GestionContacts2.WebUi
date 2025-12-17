@@ -41,18 +41,28 @@
 
                 foreach (var contact in Model)
                 {
-                    <tr>
-                        <td style="word-break:break-word;">@contact.Nom</td>
-                        <td style="word-break:break-word;">@contact.Prenom</td>
-                        <td style="white-space:nowrap;">@contact.Email</td>
-                        <td style="white-space:nowrap;">@contact.Telephone</td>
-                        <td style="word-break:break-word;">@contact.Adresse</td>
-                        <td style="word-break:break-word;">@contact.Entreprise</td>
-                        <td style="word-break:break-word;">@contact.NotesPersonnelles</td>
-                        <td>@contact.DateCreation.ToString("yyyy-MM-dd")</td>
-                        <td style="white-space:nowrap;">@contact.UtilisateurEmail</td>
-                        <td style="white-space:nowrap;">@contact.UtilisateurNom</td>
-                    </tr>
+        <tr>
+            <td style="word-break:break-word;">@contact.Nom</td>
+            <td style="word-break:break-word;">@contact.Prenom</td>
+            <td style="white-space:nowrap;">@contact.Email</td>
+            <td style="white-space:nowrap;">@contact.Telephone</td>
+            <td style="word-break:break-word;">@contact.Adresse</td>
+            <td style="word-break:break-word;">@contact.Entreprise</td>
+            <td style="word-break:break-word;">@contact.NotesPersonnelles</td>
+            <td>@contact.DateCreation.ToString("yyyy-MM-dd")</td>
+            <td style="white-space:nowrap;">@contact.UtilisateurEmail</td>
+            <td style="white-space:nowrap;">@contact.UtilisateurNom</td>
+
+            <td>
+                <a href="@Url.Action("Delete", "Contact", new { id = contact.Id })" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Voulez-vous vraiment supprimer ce contact?');">
+                    <i class="bi bi-trash"></i> Supprimer
+                </a>
+                
+            </td>
+
+
+        </tr>
                 }
             }
         </tbody>
