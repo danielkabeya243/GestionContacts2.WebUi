@@ -339,5 +339,34 @@ namespace GestionContacts2.WebUi.Controllers
 
 
         }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult ExportContactsJson()
+        {
+            var contacts = _context.Contacts
+                .Select(c => new
+                {
+                    c.ContactId,
+                    c.Nom,
+                    c.Prenom,
+                    c.Email,
+                    c.NumeroTel,
+                    c.Adresse,
+                    c.Entreprise,
+                    c.NotesPersonnelles,
+                    c.DateCreation,
+                    c.DateModification,
+                    c.UserId
+                })
+                .ToList();
+
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(contacts, Newtonsoft.Json.Formatting.Indented);
+            var bytes = System.Text.Encoding.UTF8.GetBytes(json);
+
+            return File(bytes, "application/json", "contacts_export.json");
+        }
+
+
+
     }
 }
