@@ -340,6 +340,8 @@ namespace GestionContacts2.WebUi.Controllers
 
         }
 
+        //Cette fontion permet d'exporter les contacts au format JSON et elle est juste reservée aux administrateurs
+
         [Authorize(Roles = "Admin")]
         public ActionResult ExportContactsJson()
         {
@@ -366,7 +368,64 @@ namespace GestionContacts2.WebUi.Controllers
             return File(bytes, "application/json", "contacts_export.json");
         }
 
+        [HttpPost]
+        [Authorize]
+        public ActionResult ImportContacts(HttpPostedFileBase fichier)
+        {
+            if(fichier == null || fichier.ContentLength == 0)
+            {
+                ModelState.AddModelError("", "Veuillez sélectionner un fichier à importer.");
+                return RedirectToAction("MesContacts");
+            }
+            int doublons = 0,ajoutes = 0;
+            try
+            {
+                using (var reader = new System.IO.StreamReader(fichier.InputStream))
+                {
+                    
+
+                    var json = reader.ReadToEnd();
+                    //liste des contacts importés 
+                    var contactsImportes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Contact>>(json);
+
+                    string userId = User.Identity.GetUserId();
+                    foreach (var contact in contactsImportes)
+                    {
+
+                        // Vérifie si un contact avec le même email existe déjà pour cet utilisateur
+                        bool existe = _context.Contacts.Any(c => c.UserId == userId && c.Email == contact.Email);
+                        if (existe)
+                        {
+                            doublons++;
+                            continue; // On saute ce contact
+                        }
+
+
+                        // Associe chaque contact importé à l'utilisateur connecté
+                        contact.UserId = userId;
+                        contact.DateCreation = DateTime.Now;
+                        _context.Contacts.Add(contact);
+                        ajoutes++;
+                    }
+                    _context.SaveChanges();
+                }
+                TempData["SuccessMessage"] = " $\"Import terminé : {ajoutes} contact(s) ajouté(s), {doublons} doublon(s) ignoré(s).\"";
+
+            }
+            catch (Exception ex)
+            {
+
+                TempData["MessageErreur"] = "Erreur lors de l'import : " + ex.Message;
+
+                
+            }
+            return RedirectToAction("MesContacts");
+
+        }
 
 
     }
+
+
+
 }

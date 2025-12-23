@@ -43,41 +43,44 @@
                         </div>
                     </div>
                 </div>
-            
-
-
+            }
 
             <div class="col-md-4">
                 <div class="card shadow-sm rounded-2">
                     <div class="card-body">
                         <h5 class="card-title">Contacts</h5>
-                        <p class="card-text">Voir la liste des contacts.</p>
-                        <a href="@Url.Action("TousLesContacts", "Contact")" class="btn btn-outline-primary">Gérer les contacts</a>
+                        <p class="card-text">Voir la liste de vos contacts.</p>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a href="@Url.Action("TousLesContacts", "Contact")" class="btn btn-outline-primary">Gérer les contacts</a>
+                        }
+                        else if (User.IsInRole("User"))
+                        {
+                            <a href="@Url.Action("MesContacts", "Contact")" class="btn btn-outline-primary">Mes contacts</a>
+                        }
                     </div>
                 </div>
             </div>
-            } 
+
             <div class="col-md-4">
                 <div class="card shadow-sm rounded-2">
                     <div class="card-body">
                         <h5 class="card-title">Actions rapides</h5>
                         <p class="card-text">
-                            @*Si l'utilisateur est admin alors on affiche une option de plus pour l'ajout d'un nouvel utilisateur'*@
                             @if (User.IsInRole("Admin"))
                             {
                                 <a href="@Url.Action("Create", "Users")" class="btn btn-sm btn-success me-2">Nouvel utilisateur</a>
                             }
                             @if (User.IsInRole("User"))
                             {
-                                <a href="@Url.Action("Create", "Contact")" class="btn btn-sm btn-success">Nouveau contact</a>
+                                <a href="@Url.Action("AjouterContact", "Contact")" class="btn btn-sm btn-success">Nouveau contact</a>
                             }
-
-
                         </p>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <section>
             <h2>Récents</h2>
