@@ -243,7 +243,7 @@ namespace GestionContacts2.WebUi.Controllers
                 return View("ResetPassword",model);
             }
 
-            model.Code = HttpUtility.UrlDecode(model.Code);
+           
             var user = UserManager.FindByEmail(model.Email);
             if (user == null)
             {
@@ -252,7 +252,7 @@ namespace GestionContacts2.WebUi.Controllers
             }
 
             // Utilise le token reçu (model.Code) et le nouveau mot de passe (model.Password)
-            var result = UserManager.ResetPassword(user.Id, HttpUtility.UrlDecode(model.Code), model.Password);
+            var result = UserManager.ResetPassword(user.Id,model.Code, model.Password);
 
             if (result.Succeeded)
             {
@@ -296,10 +296,12 @@ namespace GestionContacts2.WebUi.Controllers
                 // Générer le token de réinitialisation du mot de passe
                 var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 // Construire le lien de réinitialisation correct
+
+                //Url action encode le lien de réinitialisation du mot de passe en utilisant les paramètres fournis, et le protocole (http ou https) est automatiquement déterminé en fonction de la requête actuelle.
                 var callbackUrl = Url.Action(
                     "ResetPassword",      // action
                     "Auth",               // controller
-                    new { code = HttpUtility.UrlEncode(code), email = user.Email },// paramètres
+                    new { code = code, email = user.Email },// paramètres
                     protocol: Request.Url.Scheme              // http ou https automatiquement
                 );
                 // Envoyer l'email avec le lien de réinitialisation

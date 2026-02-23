@@ -33,6 +33,9 @@
         </div>
     </nav>
     <div class="container body-content">
+        @RenderSection("breadcrumb", required: false)
+
+
         @if (TempData["Success"] != null)
         {
             <div class="alert alert-success">@TempData["Success"]</div>

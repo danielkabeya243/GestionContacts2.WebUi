@@ -1,52 +1,328 @@
 ﻿@{
     ViewBag.Title = "Contact";
-    ViewBag.Message = "Nous sommes à votre écoute !";
+    ViewBag.Message = "Contactez-nous";
 }
 
-<main aria-labelledby="title">
-    <div class="row justify-content-center">
-        <div class="col-md-7">
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <h2 id="title" class="mb-3 text-center">@ViewBag.Title</h2>
-                    <h4 class="mb-4 text-center">@ViewBag.Message</h4>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-                    <div class="mb-4">
-                        <h5>Adresse</h5>
-                        <address>
+<style>
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
+    :root {
+        --green: #22c55e;
+        --dark: #0d1117;
+        --white: #ffffff;
+        --gray: #9ca3af;
+        --border: #e5e7eb;
+        --label: #6b7280;
+    }
+
+    .contact-wrapper {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      
+    }
+
+    .contact-card {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        width: 100%;
+        max-width: 900px;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.18);
+        animation: fadeUp 0.6s ease both;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ── PANNEAU GAUCHE ── */
+    .contact-left {
+        position: relative;
+        background: var(--dark);
+        padding: 3rem 2.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 2.5rem;
+        overflow: hidden;
+    }
+
+        .contact-left .building-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #0d1117 0%, #1a2332 40%, #0d1117 100%);
+        }
+
+            .contact-left .building-bg::before {
+                content: '';
+                position: absolute;
+                top: -10%;
+                left: -20%;
+                width: 140%;
+                height: 80%;
+                background: repeating-linear-gradient( -15deg, transparent 0px, transparent 28px, rgba(255,255,255,0.03) 28px, rgba(255,255,255,0.03) 30px );
+                transform: skewY(-5deg);
+            }
+
+            .contact-left .building-bg::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(to bottom, rgba(13,17,23,0.3) 0%, rgba(13,17,23,0.8) 100%);
+            }
+
+    .info-block {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        animation: fadeUp 0.7s ease both;
+    }
+
+        .info-block:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .info-block:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+    .info-icon {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+        margin-top: 2px;
+        color: var(--white);
+        opacity: 0.9;
+    }
+
+    .info-block-title {
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 500;
+        font-size: 1rem;
+        color: var(--white);
+        margin-bottom: 0.3rem;
+        letter-spacing: 0.01em;
+    }
+
+    .info-block-text {
+        font-size: 0.82rem;
+        color: var(--gray);
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .info-block-link {
+        color: var(--green) !important;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: opacity 0.2s;
+    }
+
+        .info-block-link:hover {
+            opacity: 0.75;
+        }
+
+    /* ── PANNEAU DROIT ── */
+    .contact-right {
+        background: var(--white);
+        padding: 3rem 2.8rem;
+    }
+
+        .contact-right h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 2rem;
+            letter-spacing: -0.01em;
+            text-align: left;
+        }
+
+    .contact-form-group {
+        margin-bottom: 1.4rem;
+    }
+
+    .contact-label {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--label);
+        margin-bottom: 0.5rem;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    .name-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .contact-input, .contact-textarea {
+        width: 100%;
+        border: none !important;
+        border-bottom: 1.5px solid var(--border) !important;
+        border-radius: 0 !important;
+        padding: 0.55rem 0 !important;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.88rem;
+        color: #374151;
+        background: transparent !important;
+        outline: none;
+        box-shadow: none !important;
+        transition: border-color 0.25s;
+    }
+
+        .contact-input::placeholder, .contact-textarea::placeholder {
+            color: #c9cdd4;
+            font-size: 0.85rem;
+        }
+
+        .contact-input:focus, .contact-textarea:focus {
+            border-bottom-color: var(--green) !important;
+            box-shadow: none !important;
+        }
+
+    .contact-textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .contact-btn {
+        margin-top: 1.8rem;
+        background: var(--green) !important;
+        color: white !important;
+        border: none !important;
+        padding: 0.8rem 2.2rem !important;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.78rem !important;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 2px !important;
+        transition: background 0.2s, transform 0.15s;
+    }
+
+        .contact-btn:hover {
+            background: #16a34a !important;
+            transform: translateY(-1px);
+        }
+
+    @@media (max-width: 640px) {
+        .contact-card {
+            grid-template-columns: 1fr;
+        }
+
+        .contact-left {
+            padding: 2.5rem 2rem;
+            min-height: 280px;
+        }
+
+        .name-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<main aria-labelledby="contact-title">
+    <div class="contact-wrapper">
+        <div class="contact-card">
+
+            <!-- PANNEAU GAUCHE -->
+            <div class="contact-left">
+                <div class="building-bg"></div>
+
+                <div class="info-block">
+                    <svg class="info-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <div>
+                        <p class="info-block-title">Adresse</p>
+                        <p class="info-block-text">
                             2040 Wildflower Dr<br />
                             Ottawa, Ontario<br />
-                            <abbr title="Phone">Téléphone :</abbr> 343-598-5852
-                        </address>
+                            Tél : 343-598-5852
+                        </p>
                     </div>
+                </div>
 
-                    <div class="mb-4">
-                        <h5>Contacts</h5>
-                        <address>
-                            <strong>Support :</strong>
-                            <a href="mailto:danielkabeya243@outlook.com">danielkabeya243@outlook.com</a><br />
-                            <strong>Marketing :</strong>
-                            <a href="mailto:danielkabeya243@outlook.com">danielkabeya243@outlook.com</a>
-                        </address>
+                <div class="info-block">
+                    <svg class="info-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498A1 1 0 0121 15.72V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    <div>
+                        <p class="info-block-title">Support</p>
+                        <a href="mailto:danielkabeya243@outlook.com" class="info-block-link">danielkabeya243@outlook.com</a>
                     </div>
+                </div>
 
-                    <!-- Exemple de formulaire de contact (optionnel) -->
-                    <!--
-                    <h5>Envoyez-nous un message</h5>
-                    <form>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Votre email</label>
-                            <input type="email" class="form-control" id="email" placeholder="Votre adresse email">
-                        </div>
-                        <div class="mb-3">
-                            <label for="message" class="form-label">Message</label>
-                            <textarea class="form-control" id="message" rows="3" placeholder="Votre message"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Envoyer</button>
-                    </form>
-                    -->
+                <div class="info-block">
+                    <svg class="info-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <div>
+                        <p class="info-block-title">Marketing</p>
+                        <a href="mailto:danielkabeya243@outlook.com" class="info-block-link">danielkabeya243@outlook.com</a>
+                    </div>
                 </div>
             </div>
+
+            <!-- PANNEAU DROIT -->
+            <div class="contact-right">
+                <h2 id="contact-title">Envoyez-nous un message</h2>
+
+                <form>
+                    @Html.AntiForgeryToken()
+
+                    <div class="contact-form-group">
+                        <label class="contact-label">Votre nom <span style="color:#111">*</span></label>
+                        <div class="name-row">
+                            <input type="text" class="contact-input" placeholder="Prénom" />
+                            <input type="text" class="contact-input" placeholder="Nom de famille" />
+                        </div>
+                    </div>
+
+                    <div class="contact-form-group">
+                        <label class="contact-label">Votre email <span style="color:#111">*</span></label>
+                        <input type="email" class="contact-input" placeholder="Ex. exemple@email.com" />
+                    </div>
+
+                    <div class="contact-form-group">
+                        <label class="contact-label">Numéro de téléphone</label>
+                        <input type="tel" class="contact-input" placeholder="Ex. +1 800 000000" />
+                    </div>
+
+                    <div class="contact-form-group">
+                        <label class="contact-label">Message <span style="color:#111">*</span></label>
+                        <textarea class="contact-textarea contact-input" placeholder="Écrivez-nous un message"></textarea>
+                    </div>
+
+                    <button type="submit" class="contact-btn">Envoyer le message</button>
+                </form>
+            </div>
+
         </div>
     </div>
 </main>
+

@@ -1,62 +1,77 @@
 ﻿@model GestionContacts2.Data.Contact
 @{
-    ViewBag.Title = "AjouterContact";
+    ViewBag.Title = "Ajouter un contact";
 }
+
 @if (TempData["SuccessMessage"] != null)
 {
-    <div style="padding:10px; background-color:#d4edda; color:#155724; border:1px solid #c3e6cb; border-radius:4px; margin-bottom:10px;">
+    <div class="alert alert-success text-center mb-3">
         @TempData["SuccessMessage"]
     </div>
 }
 
-<h2>Ajouter un Contact</h2>
+<h2 class="text-center mb-4"><i class="bi bi-person-plus"></i> Ajouter un Contact</h2>
 
-@using (Html.BeginForm("AjouterContact", "Contact", FormMethod.Post))
-{
-   
-
-    <div class="form-group mb-3">
-        <label>Nom :</label>
-        @Html.TextBoxFor(model => model.Nom, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Nom)
-    </div>
-
-    <div class="form-group mb-3">
-        <label>Prénom :</label>
-        @Html.TextBoxFor(model => model.Prenom, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Prenom)
-    </div>
-
-    <div class="form-group mb-3">
-        <label>Email :</label>
-        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Email)
-    </div>
-
-    <div class="form-group mb-3">
-        <label>Numéro de téléphone :</label>
-        @Html.TextBoxFor(model => model.NumeroTel, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.NumeroTel)
-    </div>
-
-    <div class="form-group mb-3">
-        <label>Adresse :</label>
-        @Html.TextBoxFor(model => model.Adresse, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Adresse)
-    </div>
-
-    <div class="form-group mb-3">
-        <label>Entreprise :</label>
-        @Html.TextBoxFor(model => model.Entreprise, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Entreprise)
-    </div>
-
-    <div class="form-group mb-3">
-        <label>Notes personnelles :</label>
-        @Html.TextBoxFor(model => model.NotesPersonnelles, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.NotesPersonnelles)
-    </div>
-
-    <button type="submit" class="btn btn-primary">Ajouter</button>
+@section breadcrumb {
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("MesContacts", "Contact")">Mes contacts</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Ajouter un contact</li>
+        </ol>
+    </nav>
 }
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 70vh; background: #f5f5f5; ">
+    <div class="card shadow-lg rounded-4" style="min-width:350px; max-width:500px; width:100%;">
+        <div class="card-body">
+            @using (Html.BeginForm("AjouterContact", "Contact", FormMethod.Post))
+            {
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Nom</label>
+                    @Html.TextBoxFor(model => model.Nom, new { @class = "form-control", placeholder = "Nom" })
+                    @Html.ValidationMessageFor(model => model.Nom, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Prénom</label>
+                    @Html.TextBoxFor(model => model.Prenom, new { @class = "form-control", placeholder = "Prénom" })
+                    @Html.ValidationMessageFor(model => model.Prenom, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Email</label>
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Adresse email" })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Numéro de téléphone</label>
+                    @Html.TextBoxFor(model => model.NumeroTel, new { @class = "form-control", placeholder = "Numéro de téléphone" })
+                    @Html.ValidationMessageFor(model => model.NumeroTel, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Adresse</label>
+                    @Html.TextBoxFor(model => model.Adresse, new { @class = "form-control", placeholder = "Adresse" })
+                    @Html.ValidationMessageFor(model => model.Adresse, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Entreprise</label>
+                    @Html.TextBoxFor(model => model.Entreprise, new { @class = "form-control", placeholder = "Entreprise" })
+                    @Html.ValidationMessageFor(model => model.Entreprise, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group mb-4">
+                    <label class="form-label fw-bold">Notes personnelles</label>
+                    @Html.TextBoxFor(model => model.NotesPersonnelles, new { @class = "form-control", placeholder = "Notes personnelles" })
+                    @Html.ValidationMessageFor(model => model.NotesPersonnelles, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary px-4 fw-bold me-2">
+                        <i class="bi bi-plus-circle"></i> Ajouter
+                    </button>
+                    <a href="@Url.Action("MesContacts", "Contact")" class="btn btn-outline-secondary px-4 fw-bold">
+                        Annuler
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
 
