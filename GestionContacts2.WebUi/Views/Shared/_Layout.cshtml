@@ -1,58 +1,330 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Mon application ASP.NET</title>
+    <title>@ViewBag.Title - EasyContacts</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
 
+
+        .ec-nav .navbar-nav .nav-link {
+            color: #9ca3af !important;
+            font-family: 'DM Sans', sans-serif !important;
+            font-size: 0.78rem !important;
+            font-weight: 500 !important;
+            letter-spacing: 0.06em !important;
+            text-transform: uppercase !important;
+            padding: 0.4rem 0.9rem !important;
+            text-decoration: none !important;
+        }
+
+            .ec-nav .navbar-nav .nav-link:hover {
+                color: #ffffff !important;
+                background: rgba(255,255,255,0.05) !important;
+                border-radius: 2px;
+            }
+        /* ── NAVBAR ── */
+        .ec-nav {
+            background: #0d1117;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+            .ec-nav .container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+            }
+
+        .ec-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ffffff !important;
+            text-decoration: none !important;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+            .ec-brand span {
+                color: #22c55e;
+            }
+
+        .ec-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+            .ec-nav-links .nav-link {
+                font-family: 'DM Sans', sans-serif;
+                font-size: 0.78rem !important;
+                font-weight: 500;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                color: #9ca3af !important;
+                padding: 0.4rem 0.9rem !important;
+                border-radius: 2px;
+                transition: color 0.2s, background 0.2s;
+                text-decoration: none;
+            }
+
+                .ec-nav-links .nav-link:hover {
+                    color: #ffffff !important;
+                    background: rgba(255,255,255,0.05);
+                }
+
+                .ec-nav-links .nav-link.active {
+                    color: #22c55e !important;
+                }
+
+        /* Partie login à droite */
+        .ec-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+            .ec-nav-right a {
+                font-family: 'DM Sans', sans-serif;
+                font-size: 0.75rem;
+                font-weight: 500;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                text-decoration: none;
+                padding: 0.4rem 1rem;
+                border-radius: 2px;
+                transition: all 0.2s;
+            }
+
+            /* Surcharge pour les liens du partial login */
+            .ec-nav-right .nav-link {
+                color: #9ca3af !important;
+                font-family: 'DM Sans', sans-serif !important;
+                font-size: 0.75rem !important;
+                font-weight: 500 !important;
+                letter-spacing: 0.06em !important;
+                text-transform: uppercase !important;
+            }
+
+                .ec-nav-right .nav-link:hover {
+                    color: #ffffff !important;
+                }
+
+            .ec-nav-right .btn-primary,
+            .ec-nav-right .btn-success {
+                background: #22c55e !important;
+                border: none !important;
+                color: white !important;
+                font-family: 'DM Sans', sans-serif !important;
+                font-size: 0.72rem !important;
+                font-weight: 500 !important;
+                letter-spacing: 0.08em !important;
+                text-transform: uppercase !important;
+                padding: 0.4rem 1.1rem !important;
+                border-radius: 2px !important;
+            }
+
+                .ec-nav-right .btn-primary:hover,
+                .ec-nav-right .btn-success:hover {
+                    background: #16a34a !important;
+                }
+
+            .ec-nav-right .btn-default,
+            .ec-nav-right .btn-outline-secondary {
+                background: transparent !important;
+                border: 1px solid rgba(255,255,255,0.15) !important;
+                color: #9ca3af !important;
+                font-family: 'DM Sans', sans-serif !important;
+                font-size: 0.72rem !important;
+                font-weight: 500 !important;
+                letter-spacing: 0.08em !important;
+                text-transform: uppercase !important;
+                padding: 0.4rem 1.1rem !important;
+                border-radius: 2px !important;
+            }
+
+                .ec-nav-right .btn-default:hover,
+                .ec-nav-right .btn-outline-secondary:hover {
+                    border-color: #22c55e !important;
+                    color: #22c55e !important;
+                }
+
+        /* Toggler mobile */
+        .ec-toggler {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 2px;
+            padding: 0.35rem 0.6rem;
+            cursor: pointer;
+            display: none;
+        }
+
+            .ec-toggler span {
+                display: block;
+                width: 18px;
+                height: 1.5px;
+                background: #9ca3af;
+                margin: 3px 0;
+                transition: 0.2s;
+            }
+
+        /* ── ALERTES GLOBALES ── */
+        .ec-alerts {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .ec-alert {
+            padding: 0.8rem 1.2rem;
+            border-radius: 3px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            margin-top: 1rem;
+            border-left: 3px solid;
+        }
+
+        .ec-alert-success {
+            background: #f0fdf4;
+            color: #15803d;
+            border-color: #22c55e;
+        }
+
+        .ec-alert-danger {
+            background: #fef2f2;
+            color: #dc2626;
+            border-color: #ef4444;
+        }
+
+        /* ── FOOTER ── */
+        .ec-footer {
+            background: #0d1117;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: 1.5rem 0;
+            margin-top: auto;
+        }
+
+        .ec-footer-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .ec-footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+            .ec-footer-brand span {
+                color: #22c55e;
+            }
+
+        .ec-footer-copy {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.72rem;
+            color: #4b5563;
+            letter-spacing: 0.04em;
+        }
+
+        @@media (max-width: 640px) {
+            .ec-toggler {
+                display: block;
+            }
+
+            .ec-nav-links, .ec-nav-right {
+                display: none;
+            }
+
+                .ec-nav-links.open, .ec-nav-right.open {
+                    display: flex;
+                    flex-direction: column;
+                    width: 100%;
+                }
+
+            .ec-nav .container {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
 </head>
-<body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
-            @Html.ActionLink("EasyContacts", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Activer/désactiver la navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Accueil", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("À propos de", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+<body style="display:flex; flex-direction:column; min-height:100vh; margin:0;">
 
-                    @if(User.IsInRole("Admin"))
+    <!-- ── NAVBAR ── -->
+    <nav class="ec-nav">
+        <div class="container">
+            @Html.ActionLink("Easy", "Index", "Home", new { area = "" }, new { @class = "ec-brand" })
+
+            <button class="ec-toggler navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+
+            <div class="collapse navbar-collapse" style="flex:1; margin-left:2rem; display:flex !important; align-items:center; justify-content:space-between;">
+                <ul class="navbar-nav" style="display:flex; flex-direction:row; align-items:center; gap:0.25rem; margin:0; padding:0; list-style:none;">
+                    <li>@Html.ActionLink("Accueil", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("À propos", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    @if (User.IsInRole("Admin"))
                     {
-                        <li>@Html.ActionLink("Utilisateurs","TousLesUtilisateurs", "Users",null, new {@class="nav-link"})</li>
+                        <li>@Html.ActionLink("Utilisateurs", "TousLesUtilisateurs", "Users", null, new { @class = "nav-link" })</li>
                     }
                 </ul>
-                 @Html.Partial("_LoginPartial")
+                <div style="display:flex; align-items:center;">
+                    @Html.Partial("_LoginPartial")
+                </div>
             </div>
         </div>
     </nav>
-    <div class="container body-content">
-        @RenderSection("breadcrumb", required: false)
 
+    <!-- ── ALERTES GLOBALES ── -->
+    @if (TempData["Success"] != null || TempData["Error"] != null)
+    {
+        <div class="ec-alerts">
+            @if (TempData["Success"] != null)
+            {
+                <div class="ec-alert ec-alert-success">@TempData["Success"]</div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="ec-alert ec-alert-danger">@TempData["Error"]</div>
+            }
+        </div>
+    }
 
-        @if (TempData["Success"] != null)
-        {
-            <div class="alert alert-success">@TempData["Success"]</div>
-        }
-        @if (TempData["Error"] != null)
-        {
-            <div class="alert alert-danger">@TempData["Error"]</div>
-        }
+    @RenderSection("breadcrumb", required: false)
 
-
-
+    <!-- ── CONTENU ── -->
+    <main style="flex:1;">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Mon application ASP.NET</p>
-        </footer>
-    </div>
+    </main>
+
+    <!-- ── FOOTER ── -->
+    <footer class="ec-footer">
+        <div class="ec-footer-inner">
+            <span class="ec-footer-brand">Easy<span>Contacts</span></span>
+            <span class="ec-footer-copy">&copy; @DateTime.Now.Year — Tous droits réservés</span>
+        </div>
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

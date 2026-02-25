@@ -3,75 +3,423 @@
     ViewBag.Title = "Ajouter un contact";
 }
 
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --green: #22c55e;
+        --dark: #0d1117;
+        --white: #ffffff;
+        --gray: #9ca3af;
+        --border: #e5e7eb;
+        --label: #6b7280;
+    }
+
+    .ac-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .ac-card {
+        display: grid;
+        grid-template-columns: 0.75fr 1.25fr;
+        width: 100%;
+        animation: acFadeUp 0.6s ease both;
+    }
+
+    @@keyframes acFadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ── PANNEAU GAUCHE ── */
+    .ac-left {
+        position: relative;
+        background: var(--dark);
+        padding: 3rem 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 1.8rem;
+        overflow: hidden;
+    }
+
+    .ac-building {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #0d1117 0%, #1a2332 40%, #0d1117 100%);
+    }
+
+        .ac-building::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: -20%;
+            width: 140%;
+            height: 80%;
+            background: repeating-linear-gradient( -15deg, transparent 0px, transparent 28px, rgba(255,255,255,0.03) 28px, rgba(255,255,255,0.03) 30px );
+            transform: skewY(-5deg);
+        }
+
+        .ac-building::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(13,17,23,0.2) 0%, rgba(13,17,23,0.75) 100%);
+        }
+
+    .ac-left-title {
+        position: relative;
+        z-index: 2;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--white);
+        line-height: 1.3;
+    }
+
+        .ac-left-title span {
+            color: var(--green);
+        }
+
+    .ac-left-desc {
+        position: relative;
+        z-index: 2;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.82rem;
+        color: var(--gray);
+        line-height: 1.7;
+    }
+
+    .ac-feature {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .ac-feature-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green);
+        flex-shrink: 0;
+    }
+
+    .ac-feature-text {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.8rem;
+        color: var(--gray);
+    }
+
+    .ac-breadcrumb {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+        margin-top: auto;
+    }
+
+        .ac-breadcrumb a {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.72rem;
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+            .ac-breadcrumb a:hover {
+                color: var(--green);
+            }
+
+        .ac-breadcrumb span {
+            font-size: 0.72rem;
+            color: #4b5563;
+        }
+
+    .ac-breadcrumb-current {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.72rem;
+        color: var(--green);
+    }
+
+    /* ── PANNEAU DROIT ── */
+    .ac-right {
+        background: var(--white);
+        padding: 3rem 2.8rem;
+        overflow-y: auto;
+    }
+
+        .ac-right h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.01em;
+        }
+
+    .ac-right-sub {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.72rem;
+        color: var(--gray);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+    }
+
+    /* ── ALERTE ── */
+    .ac-alert {
+        padding: 0.8rem 1.2rem;
+        border-radius: 3px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.82rem;
+        margin-bottom: 1.5rem;
+        border-left: 3px solid var(--green);
+        background: #f0fdf4;
+        color: #15803d;
+    }
+
+    /* ── FORMULAIRE ── */
+    .ac-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .ac-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .ac-label {
+        display: block;
+        font-size: 0.68rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--label);
+        margin-bottom: 0.4rem;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    .ac-input {
+        width: 100%;
+        border: none !important;
+        border-bottom: 1.5px solid var(--border) !important;
+        border-radius: 0 !important;
+        padding: 0.5rem 0 !important;
+        font-family: 'DM Sans', sans-serif !important;
+        font-size: 0.85rem !important;
+        color: #374151 !important;
+        background: transparent !important;
+        outline: none !important;
+        box-shadow: none !important;
+        transition: border-color 0.25s;
+    }
+
+        .ac-input::placeholder {
+            color: #c9cdd4;
+            font-size: 0.82rem;
+        }
+
+        .ac-input:focus {
+            border-bottom-color: var(--green) !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+
+    .ac-error {
+        font-size: 0.72rem;
+        color: #ef4444;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    /* ── BOUTONS ── */
+    .ac-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1.8rem;
+    }
+
+    .ac-btn-primary {
+        background: var(--green);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.15s;
+        flex: 1;
+    }
+
+        .ac-btn-primary:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+        }
+
+    .ac-btn-cancel {
+        background: transparent;
+        color: #6b7280;
+        border: 1px solid var(--border);
+        padding: 0.75rem 2rem;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-radius: 2px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: border-color 0.2s, color 0.2s;
+        flex: 1;
+    }
+
+        .ac-btn-cancel:hover {
+            border-color: #9ca3af;
+            color: #374151;
+        }
+
+    @@media (max-width: 700px) {
+        .ac-card {
+            grid-template-columns: 1fr;
+        }
+
+        .ac-left {
+            min-height: 200px;
+            padding: 2rem;
+        }
+
+        .ac-row {
+            grid-template-columns: 1fr;
+        }
+
+        .ac-right {
+            padding: 2rem 1.5rem;
+        }
+    }
+</style>
+
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success text-center mb-3">
-        @TempData["SuccessMessage"]
-    </div>
+    <div class="ac-alert">@TempData["SuccessMessage"]</div>
 }
 
-<h2 class="text-center mb-4"><i class="bi bi-person-plus"></i> Ajouter un Contact</h2>
+<main class="ac-wrapper" aria-labelledby="ac-title">
+    <div class="ac-card">
 
-@section breadcrumb {
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Accueil</a></li>
-            <li class="breadcrumb-item"><a href="@Url.Action("MesContacts", "Contact")">Mes contacts</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Ajouter un contact</li>
-        </ol>
-    </nav>
-}
+        <!-- PANNEAU GAUCHE -->
+        <div class="ac-left">
+            <div class="ac-building"></div>
 
-<div class="d-flex justify-content-center align-items-center" style="min-height: 70vh; background: #f5f5f5; ">
-    <div class="card shadow-lg rounded-4" style="min-width:350px; max-width:500px; width:100%;">
-        <div class="card-body">
+            <p class="ac-left-title">Ajouter un<br><span>nouveau contact</span></p>
+            <p class="ac-left-desc">Remplissez le formulaire pour enregistrer un nouveau contact dans votre liste.</p>
+
+            <div class="ac-feature">
+                <div class="ac-feature-dot"></div>
+                <span class="ac-feature-text">Contact lié à votre compte</span>
+            </div>
+            <div class="ac-feature">
+                <div class="ac-feature-dot"></div>
+                <span class="ac-feature-text">Accessible uniquement par vous</span>
+            </div>
+            <div class="ac-feature">
+                <div class="ac-feature-dot"></div>
+                <span class="ac-feature-text">Modifiable à tout moment</span>
+            </div>
+
+            <div class="ac-breadcrumb">
+                <a href="@Url.Action("Index", "Home")">Accueil</a>
+                <span>›</span>
+                <a href="@Url.Action("MesContacts", "Contact")">Mes contacts</a>
+                <span>›</span>
+                <span class="ac-breadcrumb-current">Ajouter</span>
+            </div>
+        </div>
+
+        <!-- PANNEAU DROIT -->
+        <div class="ac-right">
+            <h2 id="ac-title">Nouveau contact</h2>
+            <p class="ac-right-sub">Informations du contact</p>
+
             @using (Html.BeginForm("AjouterContact", "Contact", FormMethod.Post))
             {
-                <div class="form-group mb-3">
-                    <label class="form-label fw-bold">Nom</label>
-                    @Html.TextBoxFor(model => model.Nom, new { @class = "form-control", placeholder = "Nom" })
-                    @Html.ValidationMessageFor(model => model.Nom, "", new { @class = "text-danger" })
+                <!-- Nom & Prénom -->
+                <div class="ac-row">
+                    <div class="ac-group">
+                        <label class="ac-label">Nom <span style="color:#111">*</span></label>
+                        @Html.TextBoxFor(model => model.Nom, new { @class = "ac-input", placeholder = "Nom" })
+                        @Html.ValidationMessageFor(model => model.Nom, "", new { @class = "ac-error" })
+                    </div>
+                    <div class="ac-group">
+                        <label class="ac-label">Prénom <span style="color:#111">*</span></label>
+                        @Html.TextBoxFor(model => model.Prenom, new { @class = "ac-input", placeholder = "Prénom" })
+                        @Html.ValidationMessageFor(model => model.Prenom, "", new { @class = "ac-error" })
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <label class="form-label fw-bold">Prénom</label>
-                    @Html.TextBoxFor(model => model.Prenom, new { @class = "form-control", placeholder = "Prénom" })
-                    @Html.ValidationMessageFor(model => model.Prenom, "", new { @class = "text-danger" })
+
+                <!-- Email & Téléphone -->
+                <div class="ac-row">
+                    <div class="ac-group">
+                        <label class="ac-label">Email</label>
+                        @Html.TextBoxFor(model => model.Email, new { @class = "ac-input", placeholder = "exemple@email.com" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "ac-error" })
+                    </div>
+                    <div class="ac-group">
+                        <label class="ac-label">Téléphone</label>
+                        @Html.TextBoxFor(model => model.NumeroTel, new { @class = "ac-input", placeholder = "+1 800 000000" })
+                        @Html.ValidationMessageFor(model => model.NumeroTel, "", new { @class = "ac-error" })
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <label class="form-label fw-bold">Email</label>
-                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Adresse email" })
-                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+                <!-- Adresse & Entreprise -->
+                <div class="ac-row">
+                    <div class="ac-group">
+                        <label class="ac-label">Adresse</label>
+                        @Html.TextBoxFor(model => model.Adresse, new { @class = "ac-input", placeholder = "Adresse" })
+                        @Html.ValidationMessageFor(model => model.Adresse, "", new { @class = "ac-error" })
+                    </div>
+                    <div class="ac-group">
+                        <label class="ac-label">Entreprise</label>
+                        @Html.TextBoxFor(model => model.Entreprise, new { @class = "ac-input", placeholder = "Entreprise" })
+                        @Html.ValidationMessageFor(model => model.Entreprise, "", new { @class = "ac-error" })
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <label class="form-label fw-bold">Numéro de téléphone</label>
-                    @Html.TextBoxFor(model => model.NumeroTel, new { @class = "form-control", placeholder = "Numéro de téléphone" })
-                    @Html.ValidationMessageFor(model => model.NumeroTel, "", new { @class = "text-danger" })
+
+                <!-- Notes -->
+                <div class="ac-group">
+                    <label class="ac-label">Notes personnelles</label>
+                    @Html.TextBoxFor(model => model.NotesPersonnelles, new { @class = "ac-input", placeholder = "Notes personnelles..." })
+                    @Html.ValidationMessageFor(model => model.NotesPersonnelles, "", new { @class = "ac-error" })
                 </div>
-                <div class="form-group mb-3">
-                    <label class="form-label fw-bold">Adresse</label>
-                    @Html.TextBoxFor(model => model.Adresse, new { @class = "form-control", placeholder = "Adresse" })
-                    @Html.ValidationMessageFor(model => model.Adresse, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group mb-3">
-                    <label class="form-label fw-bold">Entreprise</label>
-                    @Html.TextBoxFor(model => model.Entreprise, new { @class = "form-control", placeholder = "Entreprise" })
-                    @Html.ValidationMessageFor(model => model.Entreprise, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group mb-4">
-                    <label class="form-label fw-bold">Notes personnelles</label>
-                    @Html.TextBoxFor(model => model.NotesPersonnelles, new { @class = "form-control", placeholder = "Notes personnelles" })
-                    @Html.ValidationMessageFor(model => model.NotesPersonnelles, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group text-center">
-                    <button type="submit" class="btn btn-primary px-4 fw-bold me-2">
-                        <i class="bi bi-plus-circle"></i> Ajouter
-                    </button>
-                    <a href="@Url.Action("MesContacts", "Contact")" class="btn btn-outline-secondary px-4 fw-bold">
-                        Annuler
-                    </a>
+
+                <!-- Actions -->
+                <div class="ac-actions">
+                    <button type="submit" class="ac-btn-primary">Ajouter le contact</button>
+                    <a href="@Url.Action("MesContacts", "Contact")" class="ac-btn-cancel">Annuler</a>
                 </div>
             }
         </div>
-    </div>
-</div>
 
+    </div>
+</main>

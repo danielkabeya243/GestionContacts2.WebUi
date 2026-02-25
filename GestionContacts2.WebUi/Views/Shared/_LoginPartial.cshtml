@@ -1,26 +1,19 @@
 ﻿@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("Logout", "Auth", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right", style = "margin-bottom:0;" }))
+    using (Html.BeginForm("Logout", "Auth", FormMethod.Post, new { id = "logoutForm", style = "margin:0; display:flex; align-items:center; gap:0.75rem;" }))
     {
         @Html.AntiForgeryToken()
-
-        <ul class="navbar-nav navbar-right align-items-center">
-            <li class="nav-item">
-                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "MesContacts", "Contact", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
-            </li>
-            <li class="nav-item d-flex align-items-center">
-                <button type="submit" class="btn btn-link p-0 m-0" style="color: #0d6efd; background: none; border: none; font: inherit; cursor: pointer;">
-                    Se déconnecter
-                </button>
-            </li>
-        </ul>
+        @Html.ActionLink("Bonjour, " + User.Identity.GetUserName(), "MesContacts", "Contact", null, new { @class = "nav-link", style = "font-family:'DM Sans',sans-serif; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; color:#9ca3af; text-decoration:none;" })
+        <button type="submit" style="background:#22c55e; color:white; border:none; padding:0.4rem 1.1rem; font-family:'DM Sans',sans-serif; font-size:0.72rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; border-radius:2px; cursor:pointer; transition:background 0.2s;">
+            Se déconnecter
+        </button>
     }
 }
 else
 {
-    <ul class="navbar-nav navbar-right align-items-center">
-        <li class="nav-item">@Html.ActionLink("S'inscrire", "Create", "Users", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
-        <li class="nav-item">@Html.ActionLink("Se connecter", "Login", "Auth", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-link" })</li>
-    </ul>
+    <div style="display:flex; align-items:center; gap:0.75rem;">
+        @Html.ActionLink("S'inscrire", "Create", "Users", null, new { style = "background:#22c55e; color:white; padding:0.4rem 1.1rem; font-family:'DM Sans',sans-serif; font-size:0.72rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; border-radius:2px; text-decoration:none; transition:background 0.2s;" })
+        @Html.ActionLink("Se connecter", "Login", "Auth", null, new { style = "background:transparent; color:#9ca3af; border:1px solid rgba(255,255,255,0.15); padding:0.4rem 1.1rem; font-family:'DM Sans',sans-serif; font-size:0.72rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; border-radius:2px; text-decoration:none;" })
+    </div>
 }

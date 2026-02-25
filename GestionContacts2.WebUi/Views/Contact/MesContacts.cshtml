@@ -1,76 +1,412 @@
 ﻿@model IEnumerable<GestionContacts2.WebUi.Models.ContactViewModel>
-
 @{
     ViewBag.Title = "Mes Contacts";
 }
 
-<h2 class="text-center mb-4"><i class="bi bi-person-lines-fill"></i> Mes Contacts</h2>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success text-center mb-3">@TempData["SuccessMessage"]</div>
-}
-@if (TempData["MessageErreur"] != null)
-{
-    <div class="alert alert-danger text-center mb-3">@TempData["MessageErreur"]</div>
-}
+<style>
+    :root {
+        --green: #22c55e;
+        --dark: #0d1117;
+        --white: #ffffff;
+        --gray: #9ca3af;
+        --border: #e5e7eb;
+    }
 
-<div class="card shadow mb-4">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            @using (Html.BeginForm("ImportContacts", "Contact", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                <div class="input-group" style="width: 60%;">
-                    <input type="file" name="fichier" class="form-control" accept=".json" required />
-                    <button class="btn btn-success" type="submit">
-                        <i class="bi bi-upload"></i> Importer (JSON)
-                    </button>
-                </div>
+    .mc-wrapper {
+        padding: 2.5rem 2rem;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    /* ── EN-TÊTE ── */
+    .mc-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .mc-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0;
+    }
+
+    .mc-subtitle {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.78rem;
+        color: var(--gray);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-top: 0.25rem;
+    }
+
+    .mc-header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    /* ── BOUTONS ── */
+    .mc-btn-primary {
+        background: var(--green);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.4rem;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: none;
+        border-radius: 2px;
+        transition: background 0.2s, transform 0.15s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        cursor: pointer;
+    }
+
+        .mc-btn-primary:hover {
+            background: #16a34a;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+    .mc-btn-outline {
+        background: transparent;
+        color: #374151;
+        border: 1px solid var(--border);
+        padding: 0.6rem 1.4rem;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: none;
+        border-radius: 2px;
+        transition: border-color 0.2s, color 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        cursor: pointer;
+    }
+
+        .mc-btn-outline:hover {
+            border-color: var(--green);
+            color: var(--green);
+        }
+
+    /* ── ALERTES ── */
+    .mc-alert {
+        padding: 0.8rem 1.2rem;
+        border-radius: 3px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.82rem;
+        margin-bottom: 1.5rem;
+        border-left: 3px solid;
+        animation: mcFadeUp 0.4s ease both;
+    }
+
+    .mc-alert-success {
+        background: #f0fdf4;
+        color: #15803d;
+        border-color: var(--green);
+    }
+
+    .mc-alert-danger {
+        background: #fef2f2;
+        color: #dc2626;
+        border-color: #ef4444;
+    }
+
+    /* ── IMPORT ── */
+    .mc-import {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        padding: 1.2rem 1.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .mc-import-label {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--gray);
+        white-space: nowrap;
+    }
+
+    .mc-file-input {
+        border: 1px solid var(--border) !important;
+        border-radius: 2px !important;
+        padding: 0.4rem 0.8rem !important;
+        font-family: 'DM Sans', sans-serif !important;
+        font-size: 0.8rem !important;
+        color: #374151 !important;
+        background: transparent !important;
+        flex: 1;
+        min-width: 200px;
+    }
+
+    /* ── TABLEAU ── */
+    .mc-table-wrap {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        overflow: hidden;
+        animation: mcFadeUp 0.5s ease both;
+    }
+
+    @@keyframes mcFadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .mc-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+        .mc-table thead tr {
+            background: var(--dark);
+        }
+
+        .mc-table thead th {
+            padding: 0.9rem 1.2rem;
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray);
+            border: none;
+            text-align: left;
+        }
+
+            .mc-table thead th:last-child {
+                text-align: center;
             }
-            @Html.ActionLink("Ajouter un nouveau contact", "AjouterContact", "Contact", null, new { @class = "btn btn-primary" })
-        </div>
 
+        .mc-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+            .mc-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .mc-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+        .mc-table tbody td {
+            padding: 0.9rem 1.2rem;
+            font-size: 0.84rem;
+            color: #374151;
+        }
+
+            .mc-table tbody td:last-child {
+                text-align: center;
+            }
+
+    /* ── ACTIONS TABLEAU ── */
+    .mc-action-btns {
+        display: flex;
+        justify-content: center;
+        gap: 0.4rem;
+    }
+
+    .mc-action-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 2px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: opacity 0.2s, transform 0.15s;
+        border: none;
+    }
+
+        .mc-action-btn:hover {
+            opacity: 0.8;
+            transform: translateY(-1px);
+        }
+
+        .mc-action-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+    .mc-btn-view {
+        background: #e0f2fe;
+        color: #0284c7;
+    }
+
+    .mc-btn-edit {
+        background: #fef9c3;
+        color: #b45309;
+    }
+
+    .mc-btn-delete {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    /* ── VIDE ── */
+    .mc-empty {
+        padding: 4rem 2rem;
+        text-align: center;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    .mc-empty-icon {
+        width: 48px;
+        height: 48px;
+        color: #d1d5db;
+        margin: 0 auto 1rem;
+    }
+
+    .mc-empty-text {
+        font-size: 0.88rem;
+        color: var(--gray);
+        margin-bottom: 1.2rem;
+    }
+
+    @@media (max-width: 640px) {
+        .mc-wrapper {
+            padding: 1.5rem 1rem;
+        }
+
+        .mc-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .mc-table thead th:nth-child(3),
+        .mc-table tbody td:nth-child(3) {
+            display: none;
+        }
+    }
+</style>
+
+<main class="mc-wrapper" aria-labelledby="mc-title">
+
+    <!-- EN-TÊTE -->
+    <div class="mc-header">
+        <div>
+            <h2 class="mc-title" id="mc-title">Mes Contacts</h2>
+            <p class="mc-subtitle">Gérez vos contacts personnels</p>
+        </div>
+        <div class="mc-header-actions">
+            @Html.ActionLink("+ Nouveau contact", "AjouterContact", "Contact", null, new { @class = "mc-btn-primary" })
+        </div>
+    </div>
+
+    <!-- ALERTES -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="mc-alert mc-alert-success">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["MessageErreur"] != null)
+    {
+        <div class="mc-alert mc-alert-danger">@TempData["MessageErreur"]</div>
+    }
+
+    <!-- IMPORT JSON -->
+    @using (Html.BeginForm("ImportContacts", "Contact", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="mc-import">
+            <span class="mc-import-label">Importer</span>
+            <input type="file" name="fichier" class="mc-file-input form-control" accept=".json" required />
+            <button type="submit" class="mc-btn-outline">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+                </svg>
+                Importer JSON
+            </button>
+        </div>
+    }
+
+    <!-- TABLEAU -->
+    <div class="mc-table-wrap">
         @if (!Model.Any())
         {
-            <p class="text-center text-muted">Vous n'avez aucun contact pour le moment.</p>
+            <div class="mc-empty">
+                <svg class="mc-empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-5-3.87M9 20H4v-2a4 4 0 015-3.87m6-4.13a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <p class="mc-empty-text">Vous n'avez aucun contact pour le moment.</p>
+                @Html.ActionLink("+ Ajouter votre premier contact", "AjouterContact", "Contact", null, new { @class = "mc-btn-primary" })
+            </div>
         }
         else
         {
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered align-middle">
-                    <thead class="table-dark">
+            <table class="mc-table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Téléphone</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var contact in Model)
+                    {
                         <tr>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Téléphone</th>
-                            <th>Email</th>
-                            <th class="text-center">Actions</th>
+                            <td>@contact.Nom</td>
+                            <td>@contact.Prenom</td>
+                            <td>@contact.Telephone</td>
+                            <td>@contact.Email</td>
+                            <td>
+                                <div class="mc-action-btns">
+                                    <a href="@Url.Action("Details", "Contact", new { id = contact.Id })" class="mc-action-btn mc-btn-view" title="Voir">
+                                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    </a>
+                                    <a href="@Url.Action("Edit", "Contact", new { id = contact.Id })" class="mc-action-btn mc-btn-edit" title="Modifier">
+                                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                    </a>
+                                    <a href="@Url.Action("Delete", "Contact", new { id = contact.Id })" class="mc-action-btn mc-btn-delete" title="Supprimer">
+                                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var contact in Model)
-                        {
-                            <tr>
-                                <td>@contact.Nom</td>
-                                <td>@contact.Prenom</td>
-                                <td>@contact.Telephone</td>
-                                <td>@contact.Email</td>
-                                <td class="text-center">
-                                    <a href="@Url.Action("Details", "Contact", new { id = contact.Id })" class="btn btn-info btn-sm me-1" title="Voir">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a href="@Url.Action("Edit", "Contact", new { id = contact.Id })" class="btn btn-warning btn-sm me-1" title="Modifier">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <a href="@Url.Action("Delete", "Contact", new { id = contact.Id })" class="btn btn-danger btn-sm" title="Supprimer">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         }
     </div>
-</div>
+
+</main>
