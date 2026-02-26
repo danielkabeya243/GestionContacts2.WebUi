@@ -1,82 +1,433 @@
 ﻿@model IEnumerable<GestionContacts2.WebUi.Models.UtilisateurAvecRolesViewModel>
 @{
-    ViewBag.Title = "TousLesUtilisateurs";
+    ViewBag.Title = "Tous les utilisateurs";
 }
 
-@if (ViewBag.MessageErreur != null)
-{
-    <div class="alert alert-warning text-center">@ViewBag.MessageErreur</div>
-}
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-<h2 class="text-center mb-4">
-    <i class="bi bi-people-fill"></i> Tous Les Utilisateurs
-</h2>
+<style>
+    :root {
+        --green: #22c55e;
+        --dark: #0d1117;
+        --white: #ffffff;
+        --gray: #9ca3af;
+        --border: #e5e7eb;
+    }
 
-<div class="card shadow mb-4">
-    <div class="card-body">
-        @using (Html.BeginForm("TousLesUtilisateurs", "Users", FormMethod.Get))
-        {
-            <div class="input-group mb-4 w-50 mx-auto">
-                <input type="text" name="recherche" class="form-control" placeholder="Rechercher un utilisateur..." value="@Request.QueryString["recherche"]" />
-                <button class="btn btn-primary" type="submit">
-                    <i class="bi bi-search"></i> Rechercher
-                </button>
-            </div>
+    .tu-wrapper {
+        padding: 2.5rem 2rem;
+        max-width: 1300px;
+        margin: 0 auto;
+    }
+
+    /* ── EN-TÊTE ── */
+    .tu-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .tu-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0;
+    }
+
+    .tu-subtitle {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.78rem;
+        color: var(--gray);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-top: 0.25rem;
+    }
+
+    /* ── ALERTE ── */
+    .tu-alert {
+        padding: 0.8rem 1.2rem;
+        border-radius: 3px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.82rem;
+        margin-bottom: 1.5rem;
+        border-left: 3px solid #f59e0b;
+        background: #fffbeb;
+        color: #b45309;
+    }
+
+    /* ── RECHERCHE ── */
+    .tu-search-bar {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        padding: 1.2rem 1.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .tu-search-input {
+        flex: 1;
+        border: none !important;
+        border-bottom: 1.5px solid var(--border) !important;
+        border-radius: 0 !important;
+        padding: 0.45rem 0 !important;
+        font-family: 'DM Sans', sans-serif !important;
+        font-size: 0.85rem !important;
+        color: #374151 !important;
+        background: transparent !important;
+        outline: none !important;
+        box-shadow: none !important;
+        transition: border-color 0.25s;
+    }
+
+        .tu-search-input::placeholder {
+            color: #c9cdd4;
         }
 
-        <div class="table-responsive">
-            <table class="table table-striped table-hover w-100 align-middle">
-                <thead class="table-dark">
+        .tu-search-input:focus {
+            border-bottom-color: var(--green) !important;
+            box-shadow: none !important;
+        }
+
+    .tu-search-btn {
+        background: var(--green);
+        color: white;
+        border: none;
+        padding: 0.5rem 1.4rem;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-radius: 2px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: background 0.2s;
+        flex-shrink: 0;
+    }
+
+        .tu-search-btn:hover {
+            background: #16a34a;
+        }
+
+    /* ── TABLEAU ── */
+    .tu-table-wrap {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        overflow: hidden;
+        animation: tuFadeUp 0.5s ease both;
+    }
+
+    @@keyframes tuFadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .tu-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+        .tu-table thead tr {
+            background: var(--dark);
+        }
+
+        .tu-table thead th {
+            padding: 0.85rem 1rem;
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray);
+            border: none;
+            white-space: nowrap;
+        }
+
+            .tu-table thead th:last-child {
+                text-align: center;
+            }
+
+        .tu-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+            .tu-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .tu-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+        .tu-table tbody td {
+            padding: 0.85rem 1rem;
+            font-size: 0.82rem;
+            color: #374151;
+            white-space: nowrap;
+        }
+
+            .tu-table tbody td:last-child {
+                text-align: center;
+            }
+
+    /* Avatar initiales */
+    .tu-user-cell {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .tu-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(34,197,94,0.1);
+        border: 1px solid rgba(34,197,94,0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.62rem;
+        font-weight: 500;
+        color: var(--green);
+        flex-shrink: 0;
+    }
+
+    /* Badge rôle */
+    .tu-role-badge {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.68rem;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+    }
+
+    .tu-role-admin {
+        background: rgba(34,197,94,0.1);
+        color: #15803d;
+        border: 1px solid rgba(34,197,94,0.25);
+    }
+
+    .tu-role-user {
+        background: #f0f9ff;
+        color: #0369a1;
+        border: 1px solid #bae6fd;
+    }
+
+    .tu-role-none {
+        background: #f9fafb;
+        color: var(--gray);
+        border: 1px solid var(--border);
+    }
+
+    /* Badge email confirmé */
+    .tu-confirmed-yes {
+        font-size: 0.72rem;
+        color: #15803d;
+        font-weight: 500;
+    }
+
+    .tu-confirmed-no {
+        font-size: 0.72rem;
+        color: #9ca3af;
+    }
+
+    /* Boutons actions */
+    .tu-action-btns {
+        display: flex;
+        justify-content: center;
+        gap: 0.4rem;
+    }
+
+    .tu-action-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 2px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: opacity 0.2s, transform 0.15s;
+        border: none;
+        cursor: pointer;
+    }
+
+        .tu-action-btn:hover {
+            opacity: 0.8;
+            transform: translateY(-1px);
+        }
+
+        .tu-action-btn svg {
+            width: 13px;
+            height: 13px;
+        }
+
+    .tu-btn-edit {
+        background: #fef9c3;
+        color: #b45309;
+    }
+
+    .tu-btn-delete {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    /* Vide */
+    .tu-empty {
+        padding: 3rem;
+        text-align: center;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.85rem;
+        color: var(--gray);
+    }
+
+    @@media (max-width: 900px) {
+        .tu-wrapper {
+            padding: 1.5rem 1rem;
+        }
+
+        .tu-table-wrap {
+            overflow-x: auto;
+        }
+    }
+</style>
+
+<main class="tu-wrapper" aria-labelledby="tu-title">
+
+    <!-- EN-TÊTE -->
+    <div class="tu-header">
+        <div>
+            <h2 class="tu-title" id="tu-title">Tous les utilisateurs</h2>
+            <p class="tu-subtitle">Gestion des comptes — Administration</p>
+        </div>
+        <a href="@Url.Action("Create", "Users")" style="background:var(--green);color:white;border:none;padding:0.6rem 1.4rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:background 0.2s;display:inline-flex;align-items:center;gap:0.4rem;">
+            + Nouvel utilisateur
+        </a>
+    </div>
+
+    <!-- ALERTE -->
+    @if (ViewBag.MessageErreur != null)
+    {
+        <div class="tu-alert">@ViewBag.MessageErreur</div>
+    }
+
+    <!-- RECHERCHE -->
+    @using (Html.BeginForm("TousLesUtilisateurs", "Users", FormMethod.Get))
+    {
+        <div class="tu-search-bar">
+            <input type="text" name="recherche" class="tu-search-input"
+                   placeholder="Rechercher par nom, email, username..."
+                   value="@Request.QueryString["recherche"]" />
+            <button type="submit" class="tu-search-btn">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z" />
+                </svg>
+                Rechercher
+            </button>
+        </div>
+    }
+
+    <!-- TABLEAU -->
+    <div class="tu-table-wrap">
+        @if (!Model.Any())
+        {
+            <div class="tu-empty">Aucun utilisateur trouvé.</div>
+        }
+        else
+        {
+            <table class="tu-table">
+                <thead>
                     <tr>
-                        <th>Nom</th>
+                        <th>Utilisateur</th>
                         <th>Prénom</th>
                         <th>Date de naissance</th>
                         <th>Email</th>
-                        <th>Nom d'utilisateur</th>
+                        <th>Username</th>
                         <th>Téléphone</th>
-                        <th>Date d'inscription</th>
+                        <th>Inscription</th>
                         <th>Email confirmé</th>
-                        <th>Rôles</th>
+                        <th>Rôle</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (!Model.Any())
+                    @foreach (var user in Model)
                     {
                         <tr>
-                            <td colspan="10" class="text-center text-danger">Aucun utilisateur trouvé.</td>
-                        </tr>
-                    }
-                    else
-                    {
-                        foreach (var user in Model)
-                        {
-                            <tr>
-                                <td>@user.Utilisateur.Name</td>
-                                <td>@user.Utilisateur.FirstName</td>
-                                <td>@user.Utilisateur.BirthDate.ToShortDateString()</td>
-                                <td style="white-space:nowrap;">@user.Utilisateur.Email</td>
-                                <td style="white-space:nowrap;">@user.Utilisateur.UserName</td>
-                                <td>@user.Utilisateur.PhoneNumber</td>
-                                <td>@user.Utilisateur.RegistrationDate.ToShortDateString()</td>
-                                <td>@(user.Utilisateur.EmailConfirmed ? "Oui" : "Non")</td>
-                                <td>@string.Join(", ", user.Roles)</td>
-                                <td>
-                                    <a href="@Url.Action("Edit", "Users", new { id = user.Utilisateur.Id })" class="btn btn-primary btn-sm me-1" title="Modifier">
-                                        <i class="bi bi-pencil"></i>
+                            <td>
+                                <div class="tu-user-cell">
+                                    <div class="tu-avatar">
+                                        @(user.Utilisateur.Name != null && user.Utilisateur.Name.Length > 0 ? user.Utilisateur.Name[0].ToString().ToUpper() : "")@(user.Utilisateur.FirstName != null && user.Utilisateur.FirstName.Length > 0 ? user.Utilisateur.FirstName[0].ToString().ToUpper() : "")
+                                    </div>
+                                    @user.Utilisateur.Name
+                                </div>
+                            </td>
+                            <td>@user.Utilisateur.FirstName</td>
+                            <td>@user.Utilisateur.BirthDate.ToShortDateString()</td>
+                            <td>@user.Utilisateur.Email</td>
+                            <td>@user.Utilisateur.UserName</td>
+                            <td>@user.Utilisateur.PhoneNumber</td>
+                            <td>@user.Utilisateur.RegistrationDate.ToShortDateString()</td>
+                            <td>
+                                @if (user.Utilisateur.EmailConfirmed)
+                                {
+                                    <span class="tu-confirmed-yes">✓ Oui</span>
+                                }
+                                else
+                                {
+                                    <span class="tu-confirmed-no">— Non</span>
+                                }
+                            </td>
+                            <td>
+                                @foreach (var role in user.Roles)
+                                {
+                                    <span class="tu-role-badge @(role == "Admin" ? "tu-role-admin" : "tu-role-user")">@role</span>
+                                }
+                                @if (!user.Roles.Any())
+                                {
+                                    <span class="tu-role-badge tu-role-none">Aucun</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="tu-action-btns">
+                                    <a href="@Url.Action("Edit", "Users", new { id = user.Utilisateur.Id })" class="tu-action-btn tu-btn-edit" title="Modifier">
+                                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
                                     </a>
-                                    <a href="@Url.Action("Delete", "Users", new { id = user.Utilisateur.Id })" class="btn btn-danger btn-sm" title="Supprimer"
+                                    <a href="@Url.Action("Delete", "Users", new { id = user.Utilisateur.Id })"
+                                       class="tu-action-btn tu-btn-delete" title="Supprimer"
                                        onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
-                                        <i class="bi bi-trash"></i>
+                                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
                                     </a>
-                                </td>
-                            </tr>
-                        }
+                                </div>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
-        </div>
+        }
     </div>
-</div>
 
-
+</main>

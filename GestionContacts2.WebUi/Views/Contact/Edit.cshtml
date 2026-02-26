@@ -1,53 +1,431 @@
 ﻿@model GestionContacts2.Data.Contact
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Modifier le contact";
 }
 
-<h2>Modifier le contact</h2>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-@using (Html.BeginForm("Edit", "Contact", FormMethod.Post))
-{
-    @Html.HiddenFor(model => model.ContactId)
-    @*Le champs caché UserID est indispensable pour que la modification fonctionne
-        Sans lui, la modification du contact ne sera pas prise en compte*@
-    @Html.HiddenFor(model => model.UserId)
+<style>
+    :root {
+        --green: #22c55e;
+        --dark: #0d1117;
+        --white: #ffffff;
+        --gray: #9ca3af;
+        --border: #e5e7eb;
+        --label: #6b7280;
+    }
 
-    <div class="form-group mb-3">
-        <label>Nom :</label>
-        @Html.TextBoxFor(model => model.Nom, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Nom)
-    </div>
-    <div class="form-group mb-3">
-        <label>Prénom :</label>
-        @Html.TextBoxFor(model => model.Prenom, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Prenom)
-    </div>
-    <div class="form-group mb-3">
-        <label>Email :</label>
-        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Email)
-    </div>
-    <div class="form-group mb-3">
-        <label>Numéro de téléphone :</label>
-        @Html.TextBoxFor(model => model.NumeroTel, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.NumeroTel)
-    </div>
-    <div class="form-group mb-3">
-        <label>Adresse :</label>
-        @Html.TextAreaFor(model => model.Adresse, 3, 40, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Adresse)
-    </div>
-    <div class="form-group mb-3">
-        <label>Entreprise :</label>
-        @Html.TextBoxFor(model => model.Entreprise, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Entreprise)
-    </div>
-    <div class="form-group mb-3">
-        <label>Notes Personnelles :</label>
-        @Html.TextBoxFor(model => model.NotesPersonnelles, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.NotesPersonnelles)
-    </div>
+    .edit-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        padding: 0;
+    }
 
-    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
-}
+    .edit-card {
+        display: grid;
+        grid-template-columns: 0.75fr 1.25fr;
+        width: 100%;
+        animation: editFadeUp 0.6s ease both;
+    }
+
+    @@keyframes editFadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ── PANNEAU GAUCHE ── */
+    .edit-left {
+        position: relative;
+        background: var(--dark);
+        padding: 3rem 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 1.8rem;
+        overflow: hidden;
+    }
+
+    .edit-building {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #0d1117 0%, #1a2332 40%, #0d1117 100%);
+    }
+
+        .edit-building::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: -20%;
+            width: 140%;
+            height: 80%;
+            background: repeating-linear-gradient( -15deg, transparent 0px, transparent 28px, rgba(255,255,255,0.03) 28px, rgba(255,255,255,0.03) 30px );
+            transform: skewY(-5deg);
+        }
+
+        .edit-building::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(13,17,23,0.2) 0%, rgba(13,17,23,0.75) 100%);
+        }
+
+    .edit-avatar {
+        position: relative;
+        z-index: 2;
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba(34,197,94,0.15);
+        border: 1.5px solid rgba(34,197,94,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .edit-avatar-initials {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: var(--green);
+    }
+
+    .edit-left-title {
+        position: relative;
+        z-index: 2;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--white);
+        line-height: 1.3;
+    }
+
+        .edit-left-title span {
+            color: var(--green);
+        }
+
+    .edit-left-desc {
+        position: relative;
+        z-index: 2;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.82rem;
+        color: var(--gray);
+        line-height: 1.7;
+    }
+
+    .edit-feature {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .edit-feature-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green);
+        flex-shrink: 0;
+    }
+
+    .edit-feature-text {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.8rem;
+        color: var(--gray);
+    }
+
+    .edit-back {
+        position: relative;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--gray);
+        text-decoration: none;
+        margin-top: auto;
+        transition: color 0.2s;
+    }
+
+        .edit-back:hover {
+            color: var(--green);
+        }
+
+    /* ── PANNEAU DROIT ── */
+    .edit-right {
+        background: var(--white);
+        padding: 3rem 2.8rem;
+        overflow-y: auto;
+    }
+
+        .edit-right h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.01em;
+        }
+
+    .edit-right-sub {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.72rem;
+        color: var(--gray);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+    }
+
+    .edit-section-label {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.65rem;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gray);
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    /* ── FORMULAIRE ── */
+    .edit-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .edit-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .edit-label {
+        display: block;
+        font-size: 0.68rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--label);
+        margin-bottom: 0.4rem;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    .edit-input, .edit-textarea {
+        width: 100%;
+        border: none !important;
+        border-bottom: 1.5px solid var(--border) !important;
+        border-radius: 0 !important;
+        padding: 0.5rem 0 !important;
+        font-family: 'DM Sans', sans-serif !important;
+        font-size: 0.85rem !important;
+        color: #374151 !important;
+        background: transparent !important;
+        outline: none !important;
+        box-shadow: none !important;
+        transition: border-color 0.25s;
+        resize: vertical;
+    }
+
+        .edit-input:focus, .edit-textarea:focus {
+            border-bottom-color: var(--green) !important;
+            box-shadow: none !important;
+        }
+
+        .edit-input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+        }
+
+    .edit-error {
+        font-size: 0.72rem;
+        color: #ef4444;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    /* ── BOUTONS ── */
+    .edit-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1.8rem;
+    }
+
+    .edit-btn-save {
+        background: var(--green);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.15s;
+        flex: 1;
+    }
+
+        .edit-btn-save:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+        }
+
+    .edit-btn-cancel {
+        background: transparent;
+        color: #6b7280;
+        border: 1px solid var(--border);
+        padding: 0.75rem 2rem;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-radius: 2px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: border-color 0.2s, color 0.2s;
+        flex: 1;
+    }
+
+        .edit-btn-cancel:hover {
+            border-color: #9ca3af;
+            color: #374151;
+        }
+
+    @@media (max-width: 700px) {
+        .edit-card {
+            grid-template-columns: 1fr;
+        }
+
+        .edit-left {
+            min-height: 200px;
+            padding: 2rem;
+        }
+
+        .edit-row {
+            grid-template-columns: 1fr;
+        }
+
+        .edit-right {
+            padding: 2rem 1.5rem;
+        }
+    }
+</style>
+
+<main class="edit-wrapper" aria-labelledby="edit-title">
+    <div class="edit-card">
+
+        <!-- PANNEAU GAUCHE -->
+        <div class="edit-left">
+            <div class="edit-building"></div>
+
+            <div class="edit-avatar">
+                <span class="edit-avatar-initials">
+                    @(Model.Nom != null && Model.Nom.Length > 0 ? Model.Nom[0].ToString().ToUpper() : "")@(Model.Prenom != null && Model.Prenom.Length > 0 ? Model.Prenom[0].ToString().ToUpper() : "")
+                </span>
+            </div>
+
+            <p class="edit-left-title">Modifier<br><span>le contact</span></p>
+            <p class="edit-left-desc">Mettez à jour les informations de ce contact. Les champs vides seront conservés tels quels.</p>
+
+            <div class="edit-feature">
+                <div class="edit-feature-dot"></div>
+                <span class="edit-feature-text">Modifications sauvegardées immédiatement</span>
+            </div>
+            <div class="edit-feature">
+                <div class="edit-feature-dot"></div>
+                <span class="edit-feature-text">Historique de modification conservé</span>
+            </div>
+
+            <a href="@Url.Action("MesContacts", "Contact")" class="edit-back">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                </svg>
+                Retour à la liste
+            </a>
+        </div>
+
+        <!-- PANNEAU DROIT -->
+        <div class="edit-right">
+            <h2 id="edit-title">@Model.Prenom @Model.Nom</h2>
+            <p class="edit-right-sub">Modifier les informations</p>
+
+            @using (Html.BeginForm("Edit", "Contact", FormMethod.Post))
+            {
+                @Html.HiddenFor(model => model.ContactId)
+                @Html.HiddenFor(model => model.UserId)
+
+                <p class="edit-section-label">Coordonnées</p>
+
+                <div class="edit-row">
+                    <div class="edit-group">
+                        <label class="edit-label">Nom <span style="color:#111">*</span></label>
+                        @Html.TextBoxFor(model => model.Nom, new { @class = "edit-input", placeholder = "Nom" })
+                        @Html.ValidationMessageFor(model => model.Nom, "", new { @class = "edit-error" })
+                    </div>
+                    <div class="edit-group">
+                        <label class="edit-label">Prénom <span style="color:#111">*</span></label>
+                        @Html.TextBoxFor(model => model.Prenom, new { @class = "edit-input", placeholder = "Prénom" })
+                        @Html.ValidationMessageFor(model => model.Prenom, "", new { @class = "edit-error" })
+                    </div>
+                </div>
+
+                <div class="edit-row">
+                    <div class="edit-group">
+                        <label class="edit-label">Email</label>
+                        @Html.TextBoxFor(model => model.Email, new { @class = "edit-input", placeholder = "exemple@email.com" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "edit-error" })
+                    </div>
+                    <div class="edit-group">
+                        <label class="edit-label">Téléphone</label>
+                        @Html.TextBoxFor(model => model.NumeroTel, new { @class = "edit-input", placeholder = "+1 800 000000" })
+                        @Html.ValidationMessageFor(model => model.NumeroTel, "", new { @class = "edit-error" })
+                    </div>
+                </div>
+
+                <div class="edit-group">
+                    <label class="edit-label">Adresse</label>
+                    @Html.TextAreaFor(model => model.Adresse, 3, 40, new { @class = "edit-input edit-textarea", placeholder = "Adresse complète" })
+                    @Html.ValidationMessageFor(model => model.Adresse, "", new { @class = "edit-error" })
+                </div>
+
+                <p class="edit-section-label">Informations professionnelles</p>
+
+                <div class="edit-row">
+                    <div class="edit-group">
+                        <label class="edit-label">Entreprise</label>
+                        @Html.TextBoxFor(model => model.Entreprise, new { @class = "edit-input", placeholder = "Entreprise" })
+                        @Html.ValidationMessageFor(model => model.Entreprise, "", new { @class = "edit-error" })
+                    </div>
+                    <div class="edit-group">
+                        <label class="edit-label">Notes personnelles</label>
+                        @Html.TextBoxFor(model => model.NotesPersonnelles, new { @class = "edit-input", placeholder = "Notes..." })
+                        @Html.ValidationMessageFor(model => model.NotesPersonnelles, "", new { @class = "edit-error" })
+                    </div>
+                </div>
+
+                <div class="edit-actions">
+                    <button type="submit" class="edit-btn-save">Enregistrer les modifications</button>
+                    <a href="@Url.Action("MesContacts", "Contact")" class="edit-btn-cancel">Annuler</a>
+                </div>
+            }
+        </div>
+
+    </div>
+</main>
 

@@ -8,6 +8,7 @@ namespace GestionContacts2.WebUi.Models
 {
     public class DetailsContactViewModel
     {
+       
         public string Nom { get; set; }
         public string Prenom { get; set; }
         public string Email { get; set; }
